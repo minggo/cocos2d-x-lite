@@ -47,7 +47,7 @@ namespace
     
     uint32_t __enabledVertexAttribArrayFlag = 0;
     VertexAttributePointerInfo __enabledVertexAttribArrayInfo[MAX_ATTRIBUTE_UNIT];
-    
+
     uint8_t __currentActiveTextureUnit = 0;
     std::array<BoundTextureInfo, MAX_TEXTURE_UNIT> __boundTextureInfos;
 
@@ -55,6 +55,8 @@ namespace
 
     bool __unpackFlipY = false;
     bool __premultiplyAlpha = false;
+
+    GLuint __currentOffScreenFbo = 0;
 }
 
 
@@ -80,8 +82,11 @@ void ccInvalidateStateCache()
 void ccActiveTexture(GLenum texture)
 {
 #if CC_ENABLE_GL_STATE_CACHE
-    __currentActiveTextureUnit = texture - GL_TEXTURE0;
-    assert(__currentActiveTextureUnit < MAX_TEXTURE_UNIT && __currentActiveTextureUnit >= 0);
+    auto activeTextureUnit = texture - GL_TEXTURE0;
+    if(activeTextureUnit < MAX_TEXTURE_UNIT && activeTextureUnit >= 0)
+    {
+       __currentActiveTextureUnit = activeTextureUnit;
+    }
 #endif
     glActiveTexture(texture);
 }
@@ -104,6 +109,28 @@ void ccBindTexture(GLenum target, GLuint texture)
 BoundTextureInfo* getBoundTextureInfo(uint32_t textureUnit)
 {
     return &__boundTextureInfos[textureUnit];
+}
+
+/****************************************************************************************
+ FrameBuffer related
+ ***************************************************************************************/
+
+void ccBindFramebuffer(GLenum target,GLuint buffer)
+{
+    if(Application::getInstance()->isDownsampleEnabled())
+    {
+        if(target == GL_FRAMEBUFFER && buffer == Application::getInstance()->getMainFBO())
+        {
+            buffer = __currentOffScreenFbo;
+        }
+    }
+
+    glBindFramebuffer(target , buffer);
+}
+
+void ccActiveOffScreenFramebuffer(GLuint offscreenFbo)
+{
+    __currentOffScreenFbo = offscreenFbo;
 }
 
 /****************************************************************************************
