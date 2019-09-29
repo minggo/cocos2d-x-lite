@@ -22,6 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+#include <base/ccMacros.h>
 #include "EventDispatcher.h"
 
 #include "cocos/scripting/js-bindings/jswrapper/SeApi.h"
@@ -278,7 +279,9 @@ void EventDispatcher::dispatchTickEvent(float dt)
 
     se::ValueArray args;
     long long microSeconds = std::chrono::duration_cast<std::chrono::microseconds>(prevTime - se::ScriptEngine::getInstance()->getStartTime()).count();
-    args.push_back(se::Value((double)(microSeconds * 0.001)));
+    //CCLOG("dispatch tick event arg %f", (float)(microSeconds * 0.001));
+    args.push_back(se::Value(microSeconds * 0.001));
+
     _tickVal.toObject()->call(args, nullptr);
 }
 

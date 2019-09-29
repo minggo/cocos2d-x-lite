@@ -195,22 +195,11 @@
     <ClCompile Include="..\cocos\scripting\js-bindings\jswrapper\HandleObject.cpp" />
     <ClCompile Include="..\cocos\scripting\js-bindings\jswrapper\MappingUtils.cpp" />
     <ClCompile Include="..\cocos\scripting\js-bindings\jswrapper\RefCounter.cpp" />
+    <ClCompile Include="..\cocos\scripting\js-bindings\jswrapper\sm\Class.cpp" />
+    <ClCompile Include="..\cocos\scripting\js-bindings\jswrapper\sm\Object.cpp" />
+    <ClCompile Include="..\cocos\scripting\js-bindings\jswrapper\sm\ScriptEngine.cpp" />
+    <ClCompile Include="..\cocos\scripting\js-bindings\jswrapper\sm\Utils.cpp" />
     <ClCompile Include="..\cocos\scripting\js-bindings\jswrapper\State.cpp" />
-    <ClCompile Include="..\cocos\scripting\js-bindings\jswrapper\v8\Class.cpp" />
-    <ClCompile Include="..\cocos\scripting\js-bindings\jswrapper\v8\debugger\env.cc" />
-    <ClCompile Include="..\cocos\scripting\js-bindings\jswrapper\v8\debugger\http_parser.c" />
-    <ClCompile Include="..\cocos\scripting\js-bindings\jswrapper\v8\debugger\inspector_agent.cc" />
-    <ClCompile Include="..\cocos\scripting\js-bindings\jswrapper\v8\debugger\inspector_io.cc" />
-    <ClCompile Include="..\cocos\scripting\js-bindings\jswrapper\v8\debugger\inspector_socket.cc" />
-    <ClCompile Include="..\cocos\scripting\js-bindings\jswrapper\v8\debugger\inspector_socket_server.cc" />
-    <ClCompile Include="..\cocos\scripting\js-bindings\jswrapper\v8\debugger\node.cc" />
-    <ClCompile Include="..\cocos\scripting\js-bindings\jswrapper\v8\debugger\node_debug_options.cc" />
-    <ClCompile Include="..\cocos\scripting\js-bindings\jswrapper\v8\debugger\SHA1.cpp" />
-    <ClCompile Include="..\cocos\scripting\js-bindings\jswrapper\v8\debugger\util.cc" />
-    <ClCompile Include="..\cocos\scripting\js-bindings\jswrapper\v8\Object.cpp" />
-    <ClCompile Include="..\cocos\scripting\js-bindings\jswrapper\v8\ObjectWrap.cpp" />
-    <ClCompile Include="..\cocos\scripting\js-bindings\jswrapper\v8\ScriptEngine.cpp" />
-    <ClCompile Include="..\cocos\scripting\js-bindings\jswrapper\v8\Utils.cpp" />
     <ClCompile Include="..\cocos\scripting\js-bindings\jswrapper\Value.cpp" />
     <ClCompile Include="..\cocos\scripting\js-bindings\manual\jsb_classtype.cpp" />
     <ClCompile Include="..\cocos\scripting\js-bindings\manual\jsb_cocos2dx_manual.cpp" />
@@ -466,29 +455,14 @@
     <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\Object.hpp" />
     <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\RefCounter.hpp" />
     <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\SeApi.h" />
+    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\sm\Base.h" />
+    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\sm\Class.hpp" />
+    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\sm\HelperMacros.h" />
+    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\sm\Object.hpp" />
+    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\sm\ScriptEngine.hpp" />
+    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\sm\SeApi.h" />
+    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\sm\Utils.hpp" />
     <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\State.hpp" />
-    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\v8\Base.h" />
-    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\v8\Class.hpp" />
-    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\v8\debugger\base64.h" />
-    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\v8\debugger\env.h" />
-    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\v8\debugger\http_parser.h" />
-    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\v8\debugger\inspector_agent.h" />
-    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\v8\debugger\inspector_io.h" />
-    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\v8\debugger\inspector_socket.h" />
-    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\v8\debugger\inspector_socket_server.h" />
-    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\v8\debugger\node.h" />
-    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\v8\debugger\node_debug_options.h" />
-    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\v8\debugger\node_mutex.h" />
-    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\v8\debugger\SHA1.h" />
-    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\v8\debugger\util-inl.h" />
-    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\v8\debugger\util.h" />
-    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\v8\debugger\v8_inspector_protocol_json.h" />
-    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\v8\HelperMacros.h" />
-    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\v8\Object.hpp" />
-    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\v8\ObjectWrap.h" />
-    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\v8\ScriptEngine.hpp" />
-    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\v8\SeApi.h" />
-    <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\v8\Utils.hpp" />
     <ClInclude Include="..\cocos\scripting\js-bindings\jswrapper\Value.hpp" />
     <ClInclude Include="..\cocos\scripting\js-bindings\manual\jsb_classtype.hpp" />
     <ClInclude Include="..\cocos\scripting\js-bindings\manual\jsb_cocos2dx_manual.hpp" />
@@ -539,7 +513,7 @@
     <ProjectGuid>{98A51BA8-FC3A-415B-AC8F-8C7BD464E93E}</ProjectGuid>
     <RootNamespace>cocos2d-x.win32</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -551,6 +525,7 @@
     <PlatformToolset Condition="'$(VisualStudioVersion)' == '14.0' and exists('$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A')">v140_xp</PlatformToolset>
     <PlatformToolset Condition="'$(VisualStudioVersion)' == '15.0'">v141</PlatformToolset>
     <PlatformToolset Condition="'$(VisualStudioVersion)' == '15.0' and exists('$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A')">v140_xp</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -561,6 +536,7 @@
     <PlatformToolset Condition="'$(VisualStudioVersion)' == '14.0' and exists('$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A')">v140_xp</PlatformToolset>
     <PlatformToolset Condition="'$(VisualStudioVersion)' == '15.0'">v141</PlatformToolset>
     <PlatformToolset Condition="'$(VisualStudioVersion)' == '15.0' and exists('$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A')">v140_xp</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -604,7 +580,7 @@
     </PreBuildEvent>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\cocos;$(ProjectDir)..\external\sources;$(ProjectDir)..\cocos\renderer\gfx;$(ProjectDir)..\cocos\renderer;$(ProjectDir)..\cocos\platform;$(ProjectDir)..\external\win32\include\zlib;$(ProjectDir)..\external\win32\include\v8;$(ProjectDir)..\external\sources\firefox;$(projectDir)..;$(ProjectDir)..\external\win32\include;$(ProjectDir)..\external\win32\include\uv;$(ProjectDir)..\cocos\editor-support</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\cocos;$(ProjectDir)..\external\sources;$(ProjectDir)..\cocos\renderer\gfx;$(ProjectDir)..\cocos\renderer;$(ProjectDir)..\cocos\platform;$(ProjectDir)..\external\win32\include\zlib;C:\Github\cocos2d-x-lite\external\win32\include\spidermonkey;$(ProjectDir)..\external\sources\firefox;$(projectDir)..;$(ProjectDir)..\external\win32\include;$(ProjectDir)..\external\win32\include\uv;$(ProjectDir)..\cocos\editor-support</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;CC_STATIC;_USRDLL;_LIB;COCOS2D_DEBUG=1;JS_HAVE____INTN;JS_INTPTR_TYPE=int;XP_WIN;_CRT_SECURE_NO_WARNINGS;GLFW_EXPOSE_NATIVE_WIN32;GLFW_EXPOSE_NATIVE_WGL;_WINDOWS;_WIN32;__MWERKS__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>

@@ -116,7 +116,7 @@ LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH) \
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/.. \
 					$(LOCAL_PATH)/../.. \
-                    $(LOCAL_PATH)/../../external/android/$(TARGET_ARCH_ABI)/include/v8 \
+                    $(LOCAL_PATH)/../../external/android/$(TARGET_ARCH_ABI)/include/spidermonkey \
 					$(LOCAL_PATH)/../../external/sources/ 
 
 include $(BUILD_STATIC_LIBRARY)

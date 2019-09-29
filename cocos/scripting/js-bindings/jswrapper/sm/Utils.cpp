@@ -43,10 +43,12 @@ namespace se {
 
     std::string jsToStdString(JSContext* cx, JS::HandleString jsStr)
     {
-        char* str = JS_EncodeStringToUTF8(cx, jsStr);
-        std::string ret(str);
-        JS_free(cx, str);
-        return ret;
+        //char* str = JS_EncodeStringToUTF8(cx, jsStr);
+        auto len = JS_GetStringEncodingLength(cx, jsStr);
+        std::vector<char> buffer(len + 1);
+        std::fill(buffer.begin(), buffer.end(), 0);
+        JS_EncodeStringToBuffer(cx, jsStr, buffer.data(), len);
+        return buffer.data();
     }
 
     void jsToSeArgs(JSContext* cx, int argc, const JS::CallArgs& argv, ValueArray* outArr)
@@ -60,13 +62,20 @@ namespace se {
         }
     }
 
-    void seToJsArgs(JSContext* cx, const ValueArray& args, JS::AutoValueVector* outArr)
+    void seToJsArgs(JSContext* cx, const ValueArray& args, JS::MutableHandleValueVector outArr)
     {
+        int i = 0;
         for (const auto& arg : args)
         {
             JS::RootedValue v(cx);
             seToJsValue(cx, arg, &v);
-            outArr->append(v);
+            outArr.append(v);
+
+            //TODO remove
+            JS::RootedString str(cx, JS::ToString(cx, v));
+            auto data = internal::jsToStdString(cx, str);
+            SE_LOGD("call arg[%d] : %s", i, data.c_str());
+            i++;
         }
     }
 

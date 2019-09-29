@@ -265,14 +265,14 @@ namespace se {
         ScriptEngine();
         ~ScriptEngine();
 
-        static void onWeakPointerCompartmentCallback(JSContext* cx, JSCompartment* comp, void* data);
+        static void onWeakPointerCompartmentCallback(JSContext* cx, JS::Compartment* comp, void* data);
         static void onWeakPointerZoneGroupCallback(JSContext* cx, void* data);
 
         bool getScript(const std::string& path, JS::MutableHandleScript script);
         bool compileScript(const std::string& path, JS::MutableHandleScript script);
 
         JSContext* _cx;
-        JSCompartment* _oldCompartment;
+        //JS::Compartment* _oldCompartment;
 
         Object* _globalObj;
         Object* _debugGlobalObj;

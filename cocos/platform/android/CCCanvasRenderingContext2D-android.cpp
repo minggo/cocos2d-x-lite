@@ -487,9 +487,9 @@ void CanvasRenderingContext2D::set_font(const std::string& font)
             // support get font name from `60px American` or `60px "American abc-abc_abc"`
             // support get font name contain space,example `times new roman`
             // if regex rule that does not conform to the rules,such as Chinese,it defaults to sans-serif
-            std::match_results<std::string::const_iterator> fontResults;
+            //std::match_results<std::string::const_iterator> fontResults; // C++14
             std::regex fontRe("([\\w\\s-]+|\"[\\w\\s-]+\"$)");
-            if(std::regex_match(results[4].str(), fontResults, fontRe))
+            if(std::regex_match(results[4].str(), fontRe))
             {
                 fontName = results[4].str();
             }

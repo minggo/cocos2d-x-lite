@@ -31,6 +31,12 @@
 #include "ScriptEngine.hpp"
 #include "../MappingUtils.hpp"
 
+#include "jsapi.h"
+#include "js/ArrayBuffer.h"
+#include "js/JSON.h"
+#include "js/Conversions.h"
+#include "js/Equality.h"
+
 namespace se {
  
     std::unordered_map<Object*, void*> __objectMap; // Currently, the value `void*` is always nullptr
@@ -44,7 +50,8 @@ namespace se {
             JS_GetProperty(cx, obj, name.c_str(), &nsval);
             if (nsval.isNullOrUndefined()) {
                 jsObj.set(JS_NewPlainObject(cx));
-                nsval = JS::ObjectValue(*jsObj);
+                JSObject *objx = jsObj.get();
+                nsval = JS::ObjectValue(*objx);
                 JS_SetProperty(cx, obj, name.c_str(), nsval);
             } else {
                 jsObj.set(nsval.toObjectOrNull());
@@ -79,7 +86,8 @@ namespace se {
     bool Object::init(Class* cls, JSObject* obj)
     {
         _cls = cls;
-        _heap = obj;
+        _heapOpt = std::make_shared<JS::Heap<JSObject*>>();
+        *_heapOpt = obj;
 
         assert(__objectMap.find(this) == __objectMap.end());
         __objectMap.emplace(this, nullptr);
@@ -133,10 +141,10 @@ namespace se {
 
     Object* Object::createArrayBufferObject(void* data, size_t byteLength)
     {
-        JS::RootedObject jsobj(__cx, JS_NewArrayBuffer(__cx, (uint32_t)byteLength));
+        JS::RootedObject jsobj(__cx, JS::NewArrayBuffer(__cx, (uint32_t)byteLength));
         bool isShared = false;
         JS::AutoCheckCannotGC nogc;
-        uint8_t* tmpData = JS_GetArrayBufferData(jsobj, &isShared, nogc);
+        uint8_t* tmpData = JS::GetArrayBufferData(jsobj, &isShared, nogc);
         if (data)
         {
             memcpy((void*)tmpData, (const void*)data, byteLength);
@@ -281,16 +289,18 @@ namespace se {
     bool Object::defineProperty(const char *name, JSNative getter, JSNative setter)
     {
         JS::RootedObject jsObj(__cx, _getJSObject());
-        return JS_DefineProperty(__cx, jsObj, name, JS::UndefinedHandleValue, JSPROP_PERMANENT | JSPROP_ENUMERATE | JSPROP_SHARED, getter, setter);
+        //return JS_DefineProperty(__cx, jsObj, name, JS::UndefinedHandleValue, getter, setter, JSPROP_PERMANENT | JSPROP_ENUMERATE );
+        return JS_DefineProperty(__cx, jsObj, name, getter, setter, JSPROP_ENUMERATE|JSPROP_GETTER|JSPROP_SETTER|JSPROP_PERMANENT );
     }
 
     bool Object::call(const ValueArray& args, Object* thisObject, Value* rval/* = nullptr*/)
     {
         assert(isFunction());
 
-        JS::AutoValueVector jsarr(__cx);
+        JS::RootedValueVector jsarr(__cx);
         jsarr.reserve(args.size());
         internal::seToJsArgs(__cx, args, &jsarr);
+
 
         JS::RootedObject contextObject(__cx);
         if (thisObject != nullptr)
@@ -301,6 +311,13 @@ namespace se {
         JSObject* funcObj = _getJSObject();
         JS::RootedValue func(__cx, JS::ObjectValue(*funcObj));
         JS::RootedValue rcValue(__cx);
+
+
+//        for(auto i=0;i < jsarr.length(); i+=1) {
+//            JS::RootedString str(__cx, JS::ToString(__cx, jsarr[i]));
+//            auto data = internal::jsToStdString(__cx, str);
+//            SE_LOGD("call() arg[%d] : %s", i, data.c_str());
+//        }
 
         bool ok = JS_CallFunctionValue(__cx, contextObject, func, jsarr, &rcValue);
 
@@ -320,8 +337,7 @@ namespace se {
     bool Object::defineFunction(const char *funcName, JSNative func)
     {
         JS::RootedObject object(__cx, _getJSObject());
-        bool ok = JS_DefineFunction(__cx, object, funcName, func, 0, JSPROP_ENUMERATE | JSPROP_PERMANENT);
-        return ok;
+        return  JS_DefineFunction(__cx, object, funcName, func, 0, JSPROP_ENUMERATE | JSPROP_PERMANENT);
     }
 
     bool Object::getArrayLength(uint32_t* length) const
@@ -369,13 +385,12 @@ namespace se {
 
     bool Object::isFunction() const
     {
-        return JS_ObjectIsFunction(__cx, _getJSObject());
+        return _getJSObject() && JS_ObjectIsFunction(_getJSObject());
     }
 
     bool Object::_isNativeFunction(JSNative func) const
     {
-        JSObject* obj = _getJSObject();
-        return JS_ObjectIsFunction(__cx, obj) && JS_IsNativeFunction(obj, func);
+        return  _getJSObject() &&JS_IsNativeFunction(_getJSObject(), func);
     }
 
     bool Object::isTypedArray() const
@@ -428,7 +443,7 @@ namespace se {
 
     bool Object::isArrayBuffer() const
     {
-        return JS_IsArrayBufferObject(_getJSObject());
+        return JS::IsArrayBufferObject(_getJSObject());
     }
 
     bool Object::getArrayBufferData(uint8_t** ptr, size_t* length) const
@@ -437,8 +452,8 @@ namespace se {
 
         bool isShared = false;
         JS::AutoCheckCannotGC nogc;
-        *ptr = (uint8_t*)JS_GetArrayBufferData(_getJSObject(), &isShared, nogc);
-        *length = JS_GetArrayBufferByteLength(_getJSObject());
+        *ptr = JS::GetArrayBufferData(_getJSObject(), &isShared, nogc);
+        *length = JS::GetArrayBufferByteLength(_getJSObject());
         return (*ptr != nullptr);
     }
 
@@ -539,7 +554,7 @@ namespace se {
 
     JSObject* Object::_getJSObject() const
     {
-        return isRooted() ? _root->get() : _heap.get();
+        return isRooted() ? _root->get() : _heapPtr();
     }
 
     void Object::root()
@@ -566,10 +581,10 @@ namespace se {
     void Object::protect()
     {
         assert(_root == nullptr);
-        assert(_heap != JS::GCPolicy<JSObject*>::initial());
+        assert(_heapOpt != nullptr);
 
-        _root = new JS::PersistentRootedObject(__cx, _heap);
-        _heap = JS::GCPolicy<JSObject*>::initial();
+        _root = new JS::PersistentRootedObject(__cx, *_heapOpt.get());
+        _heapOpt.reset();
     }
 
     void Object::unprotect()
@@ -578,8 +593,9 @@ namespace se {
             return;
 
         assert(_currentVMId == ScriptEngine::getInstance()->getVMId());
-        assert(_heap == JS::GCPolicy<JSObject*>::initial());
-        _heap = *_root;
+        assert(_heapOpt == nullptr);
+        _heapOpt =  std::make_shared<JS::Heap<JSObject*>>();
+        *_heapOpt = *_root;
         delete _root;
         _root = nullptr;
     }
@@ -591,8 +607,7 @@ namespace se {
             delete _root;
             _root = nullptr;
         }
-
-        _heap = JS::GCPolicy<JSObject*>::initial();
+        _heapOpt.reset();
     }
 
     /* Tracing makes no sense in the rooted case, because JS::PersistentRooted
@@ -600,7 +615,7 @@ namespace se {
     void Object::trace(JSTracer* tracer, void* data)
     {
         assert(!isRooted());
-        JS::TraceEdge(tracer, &_heap, "ccobj tracing");
+        JS::TraceEdge(tracer, _heapOpt.get(), "ccobj tracing");
     }
 
     /* If not tracing, then you must call this method during GC in order to
@@ -612,11 +627,11 @@ namespace se {
         bool isGarbageCollected = false;
         internal::PrivateData* internalData = nullptr;
 
-        JSObject* oldPtr = _heap.unbarrieredGet();
-        if (_heap.unbarrieredGet() != nullptr)
-            JS_UpdateWeakPointerAfterGC(&_heap);
+        JSObject* oldPtr = _heapOpt->unbarrieredGet();
+        if (_heapOpt->unbarrieredGet() != nullptr)
+            JS_UpdateWeakPointerAfterGC(_heapOpt.get());
 
-        JSObject* newPtr = _heap.unbarrieredGet();
+        JSObject* newPtr = _heapOpt->unbarrieredGet();
 
         // IDEA: test to see ggc
         if (oldPtr != nullptr && newPtr != nullptr)
@@ -648,7 +663,7 @@ namespace se {
         JS::RootedValue v1(__cx, JS::ObjectValue(*_getJSObject()));
         JS::RootedValue v2(__cx, JS::ObjectValue(*o->_getJSObject()));
         bool same = false;
-        bool ok = JS_SameValue(__cx, v1, v2, &same);
+        bool ok = JS::SameValue(__cx, v1, v2, &same);
         return ok && same;
     }
 

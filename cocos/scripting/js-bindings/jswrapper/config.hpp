@@ -25,7 +25,7 @@
 #pragma once
 
 #define SCRIPT_ENGINE_NONE           0
-//#define SCRIPT_ENGINE_SM             1
+#define SCRIPT_ENGINE_SM             1
 #define SCRIPT_ENGINE_V8             2
 #define SCRIPT_ENGINE_JSC            3
 //#define SCRIPT_ENGINE_CHAKRACORE     4
@@ -56,7 +56,8 @@
     //TODO how to make simulator build with v8 too? Because in release mode, it will build
     // which means it will build armv7, but v8 doesn't support armv7.
 #else
-    #define SCRIPT_ENGINE_TYPE           SCRIPT_ENGINE_V8
+    //#define SCRIPT_ENGINE_TYPE           SCRIPT_ENGINE_V8
+    #define SCRIPT_ENGINE_TYPE           SCRIPT_ENGINE_SM
 #endif
 
 

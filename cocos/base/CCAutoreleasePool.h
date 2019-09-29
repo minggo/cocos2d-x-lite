@@ -26,9 +26,9 @@ THE SOFTWARE.
 #ifndef __AUTORELEASEPOOL_H__
 #define __AUTORELEASEPOOL_H__
 
+#include "base/CCRef.h"
 #include <vector>
 #include <string>
-#include "base/CCRef.h"
 
 /**
  * @addtogroup base
@@ -177,7 +177,7 @@ private:
 
     static PoolManager* s_singleInstance;
 
-    std::vector<AutoreleasePool*> _releasePoolStack;
+    ::std::vector<AutoreleasePool*> _releasePoolStack;
 };
 /**
  * @endcond

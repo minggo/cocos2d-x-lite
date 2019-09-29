@@ -397,6 +397,25 @@ static bool js_##cls_get_##property(se::State& s) \
 SE_BIND_PROP_GET(js_##cls_get_##property)
 
 BIND_PROP_WITH_TYPE__CONV_FUNC__RETURN(CanvasRenderingContext2D, _width, float, seval_to_float, setFloat)
+////#define BIND_PROP_WITH_TYPE__CONV_FUNC__RETURN(cls, property, type, convertFunc, returnFunc)
+//static bool js_CanvasRenderingContext2D_set__width(se::State& s)
+//{
+//    cocos2d::CanvasRenderingContext2D* cobj = (cocos2d::CanvasRenderingContext2D*)s.nativeThisObject();
+//    SE_PRECONDITION2(cobj, false, "js_#cls_set_#property : Invalid Native Object");
+//    const auto& args = s.args();
+//    size_t argc = args.size();
+//    bool ok = true;
+//    if (argc == 1) {
+//        float arg0; \
+//        ok &= seval_to_float(args[0], &arg0);
+//        SE_PRECONDITION2(ok, false, "js_#cls_set_#property : Error processing arguments");
+//        cobj->set__width(arg0);
+//        return true; \
+//    } \
+//    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+//    return false;
+//} \
+
 BIND_PROP_WITH_TYPE__CONV_FUNC__RETURN(CanvasRenderingContext2D, _height, float, seval_to_float, setFloat)
 BIND_PROP_WITH_TYPE__CONV_FUNC__RETURN(CanvasRenderingContext2D, lineWidth, float, seval_to_float, setFloat)
 BIND_PROP_WITH_TYPE__CONV_FUNC__RETURN(CanvasRenderingContext2D, lineJoin, std::string, seval_to_std_string, setString)

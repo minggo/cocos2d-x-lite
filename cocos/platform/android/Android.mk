@@ -19,13 +19,14 @@ LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_C_INCLUDES := $(LOCAL_PATH) \
                     $(LOCAL_PATH)/.. \
                     $(LOCAL_PATH)/../.. \
-                    $(LOCAL_PATH)/../../..
+                    $(LOCAL_PATH)/../../.. 
+
 
 LOCAL_EXPORT_LDLIBS := -lGLESv2 \
                        -lEGL \
                        -llog \
                        -landroid
 
-LOCAL_STATIC_LIBRARIES := v8_static
+LOCAL_STATIC_LIBRARIES := spidermonkey
 
 include $(BUILD_STATIC_LIBRARY)

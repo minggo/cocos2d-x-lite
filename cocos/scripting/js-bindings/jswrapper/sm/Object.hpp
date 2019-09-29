@@ -28,6 +28,7 @@
 
 #if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_SM
 
+#include <memory>
 #include "Base.h"
 #include "../Value.hpp"
 #include "../RefCounter.hpp"
@@ -377,7 +378,9 @@ namespace se {
         void unprotect();
         void reset();
 
-        JS::Heap<JSObject*> _heap;  /* should be untouched if in rooted mode */
+        JSObject *_heapPtr() const { return _heapOpt ? _heapOpt->get() : nullptr;}
+
+        std::shared_ptr<JS::Heap<JSObject*>> _heapOpt;  /* should be untouched if in rooted mode */
         JS::PersistentRootedObject* _root;  /* should be null if not in rooted mode */
 
         void* _privateData;

@@ -45,10 +45,12 @@ extern uint32_t __jsbInvocationCount;
         ++__jsbInvocationCount; \
         bool ret = false; \
         JS::CallArgs _argv = JS::CallArgsFromVp(argc, _vp); \
-        JS::Value _thiz = _argv.computeThis(_cx); \
+        JS::RootedObject _thizObj(_cx); \
+        if(!_argv.computeThis(_cx, &_thizObj)) { \
+            return ret; \
+        }   \
         se::ValueArray args; \
         se::internal::jsToSeArgs(_cx, argc, _argv, &args); \
-        JS::RootedObject _thizObj(_cx, _thiz.toObjectOrNull()); \
         void* nativeThisObject = se::internal::getPrivate(_cx, _thizObj); \
         se::State state(nativeThisObject, args); \
         ret = funcName(state); \
@@ -110,10 +112,13 @@ extern uint32_t __jsbInvocationCount;
         ++__jsbInvocationCount; \
         bool ret = false; \
         JS::CallArgs _argv = JS::CallArgsFromVp(argc, _vp); \
-        JS::Value _thiz = _argv.computeThis(_cx); \
+        JS::RootedObject _thizObj(_cx); \
+        if(!_argv.computeThis(_cx, &_thizObj)) { \
+            return ret; \
+        }   \
         se::ValueArray args; \
         se::internal::jsToSeArgs(_cx, argc, _argv, &args); \
-        se::Object* thisObject = se::Object::_createJSObject(cls, _thiz.toObjectOrNull()); \
+        se::Object* thisObject = se::Object::_createJSObject(cls, _thizObj); \
         thisObject->_setFinalizeCallback(finalizeCb##Registry); \
         se::State state(thisObject, args); \
         ret = funcName(state); \
@@ -138,8 +143,11 @@ extern uint32_t __jsbInvocationCount;
         ++__jsbInvocationCount; \
         bool ret = false; \
         JS::CallArgs _argv = JS::CallArgsFromVp(argc, _vp); \
-        JS::Value _thiz = _argv.computeThis(_cx); \
-        JS::RootedObject _thizObj(_cx, _thiz.toObjectOrNull()); \
+        JS::RootedObject _thizObj(_cx); \
+        if(!_argv.computeThis(_cx, &_thizObj)) \
+        {\
+            return ret;\
+        }\
         void* nativeThisObject = se::internal::getPrivate(_cx, _thizObj); \
         se::State state(nativeThisObject); \
         ret = funcName(state); \
@@ -157,8 +165,10 @@ extern uint32_t __jsbInvocationCount;
         ++__jsbInvocationCount; \
         bool ret = false; \
         JS::CallArgs _argv = JS::CallArgsFromVp(_argc, _vp); \
-        JS::Value _thiz = _argv.computeThis(_cx); \
-        JS::RootedObject _thizObj(_cx, _thiz.toObjectOrNull()); \
+        JS::RootedObject _thizObj(_cx); \
+        if(!_argv.computeThis(_cx, &_thizObj)) { \
+            return ret;\
+        }\
         void* nativeThisObject = se::internal::getPrivate(_cx, _thizObj); \
         se::Value data; \
         se::internal::jsToSeValue(_cx, _argv[0], &data); \

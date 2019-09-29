@@ -603,6 +603,7 @@ static bool JavaScriptJavaBridge_callStaticMethod(se::State& s)
 }
 SE_BIND_FUNC(JavaScriptJavaBridge_callStaticMethod)
 
+
 bool register_javascript_java_bridge(se::Object* obj)
 {
     se::Class* cls = se::Class::create("JavascriptJavaBridge", obj, nullptr, _SE(JavaScriptJavaBridge_constructor));

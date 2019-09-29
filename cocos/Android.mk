@@ -1,4 +1,12 @@
+
 LOCAL_PATH := $(call my-dir)
+
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := mozglue
+LOCAL_SRC_FILES := $(LOCAL_PATH)/../external/android/$(TARGET_ARCH_ABI)/libmozglue.so
+include $(PREBUILT_SHARED_LIBRARY)
+
 
 include $(CLEAR_VARS)
 
@@ -71,11 +79,10 @@ scripting/js-bindings/jswrapper/MappingUtils.cpp \
 scripting/js-bindings/jswrapper/RefCounter.cpp \
 scripting/js-bindings/jswrapper/Value.cpp \
 scripting/js-bindings/jswrapper/State.cpp \
-scripting/js-bindings/jswrapper/v8/Class.cpp \
-scripting/js-bindings/jswrapper/v8/Object.cpp \
-scripting/js-bindings/jswrapper/v8/ObjectWrap.cpp \
-scripting/js-bindings/jswrapper/v8/ScriptEngine.cpp \
-scripting/js-bindings/jswrapper/v8/Utils.cpp \
+scripting/js-bindings/jswrapper/sm/Class.cpp \
+scripting/js-bindings/jswrapper/sm/Object.cpp \
+scripting/js-bindings/jswrapper/sm/ScriptEngine.cpp \
+scripting/js-bindings/jswrapper/sm/Utils.cpp \
 scripting/js-bindings/event/EventDispatcher.cpp \
 ../external/sources/xxtea/xxtea.cpp \
 ../external/sources/tinyxml2/tinyxml2.cpp \
@@ -86,21 +93,24 @@ scripting/js-bindings/event/EventDispatcher.cpp \
 ../external/sources/ConvertUTF/ConvertUTF.c \
 ui/edit-box/EditBox-android.cpp
 
-# v8 debugger source files, always enable it
-LOCAL_SRC_FILES += \
-scripting/js-bindings/jswrapper/v8/debugger/SHA1.cpp \
-scripting/js-bindings/jswrapper/v8/debugger/util.cc \
-scripting/js-bindings/jswrapper/v8/debugger/env.cc \
-scripting/js-bindings/jswrapper/v8/debugger/inspector_agent.cc \
-scripting/js-bindings/jswrapper/v8/debugger/inspector_io.cc \
-scripting/js-bindings/jswrapper/v8/debugger/inspector_socket.cc \
-scripting/js-bindings/jswrapper/v8/debugger/inspector_socket_server.cc \
-scripting/js-bindings/jswrapper/v8/debugger/node.cc \
-scripting/js-bindings/jswrapper/v8/debugger/node_debug_options.cc \
-scripting/js-bindings/jswrapper/v8/debugger/http_parser.c
-# uv_static only used in v8 debugger
-LOCAL_STATIC_LIBRARIES += uv_static
-LOCAL_STATIC_LIBRARIES += v8_inspector
+# # v8 debugger source files, always enable it
+# LOCAL_SRC_FILES += \
+# scripting/js-bindings/jswrapper/v8/debugger/SHA1.cpp \
+# scripting/js-bindings/jswrapper/v8/debugger/util.cc \
+# scripting/js-bindings/jswrapper/v8/debugger/env.cc \
+# scripting/js-bindings/jswrapper/v8/debugger/inspector_agent.cc \
+# scripting/js-bindings/jswrapper/v8/debugger/inspector_io.cc \
+# scripting/js-bindings/jswrapper/v8/debugger/inspector_socket.cc \
+# scripting/js-bindings/jswrapper/v8/debugger/inspector_socket_server.cc \
+# scripting/js-bindings/jswrapper/v8/debugger/node.cc \
+# scripting/js-bindings/jswrapper/v8/debugger/node_debug_options.cc \
+# scripting/js-bindings/jswrapper/v8/debugger/http_parser.c
+# # uv_static only used in v8 debugger
+# LOCAL_STATIC_LIBRARIES += uv_static
+# LOCAL_STATIC_LIBRARIES += v8_inspector
+
+LOCAL_STATIC_LIBRARIES += spidermonkey
+
 LOCAL_STATIC_LIBRARIES += cocos_extension_static
 
 # opengl bindings depend on GFXUtils "_JSB_GL_CHECK"
@@ -181,6 +191,7 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH) \
                     $(LOCAL_PATH)/platform \
                     $(LOCAL_PATH)/editor-support \
                     $(LOCAL_PATH)/../external/android/$(TARGET_ARCH_ABI)/include \
+                    $(LOCAL_PATH)/../external/android/$(TARGET_ARCH_ABI)/include/spidermonkey \
                     $(LOCAL_PATH)/../external/sources \
                     $(LOCAL_PATH)/renderer \
                     $(LOCAL_PATH)/scripting/js-bindings/manual \
@@ -194,6 +205,7 @@ LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH) \
                     $(LOCAL_PATH)/base \
                     $(LOCAL_PATH)/network \
                     $(LOCAL_PATH)/../external/android/$(TARGET_ARCH_ABI)/include \
+                    $(LOCAL_PATH)/../external/android/$(TARGET_ARCH_ABI)/include/spidermonkey \
                     $(LOCAL_PATH)/../external/sources \
                     $(LOCAL_PATH)/renderer
 
@@ -206,7 +218,8 @@ endif
 
 LOCAL_STATIC_LIBRARIES += cocos_webp_static
 LOCAL_STATIC_LIBRARIES += cocos_zlib_static
-LOCAL_STATIC_LIBRARIES += v8_static
+LOCAL_STATIC_LIBRARIES += spidermonkey
+
 
 LOCAL_WHOLE_STATIC_LIBRARIES := cocos2dxandroid_static
 LOCAL_WHOLE_STATIC_LIBRARIES += cpufeatures 
