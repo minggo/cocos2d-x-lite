@@ -486,9 +486,9 @@ namespace se {
 //                    .setAsmJS(true)
 //                    .setNativeRegExp(true);
         JS::ContextOptionsRef(_cx)
-            .setWasm(false)
+            .setWasm(true)
             .setWasmIon(true)
-            .setAsmJS(false);
+            .setAsmJS(true);
 
 #endif
 
@@ -498,6 +498,10 @@ namespace se {
                 .setFieldsEnabled(true)
                 .setAwaitFixEnabled(true);
 
+
+        JS_SetGlobalJitCompilerOption(_cx, JSJitCompilerOption::JSJITCOMPILER_BASELINE_ENABLE, 1);
+        JS_SetGlobalJitCompilerOption(_cx, JSJitCompilerOption::JSJITCOMPILER_ION_ENABLE, 1);
+        JS_SetGlobalJitCompilerOption(_cx, JSJitCompilerOption::JSJITCOMPILER_BASELINE_INTERPRETER_ENABLE,1);
 
         JSObject* globalObj = JS_NewGlobalObject(_cx, &__globalClass, nullptr, JS::FireOnNewGlobalHook, realmOptions);
 
