@@ -513,9 +513,6 @@ namespace se {
 
         JS::RootedObject rootedGlobalObj(_cx, _globalObj->_getJSObject());
 
-        //_oldCompartment = JS_EnterCompartment(_cx, rootedGlobalObj);
-        //JS_InitStandardClasses(_cx, rootedGlobalObj) ;
-
         JS::EnterRealm(_cx, rootedGlobalObj);
         JS::InitRealmStandardClasses(_cx);
 
@@ -693,9 +690,8 @@ namespace se {
     void ScriptEngine::_debugProcessInput(const std::string& str)
     {
         JS::RootedObject debugGlobal(_cx, _debugGlobalObj->_getJSObject());
-//        JSCompartment *globalCpt = JS_EnterCompartment(_cx, debugGlobal);
 
-       // JSAutoRealm realm(_cx, debugGlobal);
+        JSAutoRealm realm(_cx, debugGlobal);
 
         Value func;
         if (_debugGlobalObj->getProperty("processInput", &func) && func.isObject() && func.toObject()->isFunction())
@@ -705,7 +701,6 @@ namespace se {
             func.toObject()->call(args, _debugGlobalObj);
         }
 
-//        JS_LeaveCompartment(_cx, globalCpt);
     }
 
     static bool NS_ProcessNextEvent()
@@ -943,9 +938,6 @@ namespace se {
 
         if (isDebuggerEnabled() && _debugGlobalObj == nullptr)
         {
-//            JS::CompartmentOptions options;
-//            options.behaviors().setVersion(JSVERSION_LATEST);
-//            options.creationOptions().setSharedMemoryAndAtomicsEnabled(true);
 
             JS::RealmOptions options;
             options.creationOptions()

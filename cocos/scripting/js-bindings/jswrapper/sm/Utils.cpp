@@ -43,12 +43,10 @@ namespace se {
 
     std::string jsToStdString(JSContext* cx, JS::HandleString jsStr)
     {
-        //char* str = JS_EncodeStringToUTF8(cx, jsStr);
         auto len = JS_GetStringEncodingLength(cx, jsStr);
-        std::vector<char> buffer(len + 1);
-        std::fill(buffer.begin(), buffer.end(), 0);
-        JS_EncodeStringToBuffer(cx, jsStr, buffer.data(), len);
-        return buffer.data();
+        std::string buffer(len, '\0');
+        JS_EncodeStringToBuffer(cx, jsStr, const_cast<char *>(buffer.data()), len);
+        return std::move(buffer);
     }
 
     void jsToSeArgs(JSContext* cx, int argc, const JS::CallArgs& argv, ValueArray* outArr)
