@@ -177,7 +177,7 @@ private:
 
     static PoolManager* s_singleInstance;
 
-    ::std::vector<AutoreleasePool*> _releasePoolStack;
+    std::vector<AutoreleasePool*> _releasePoolStack;
 };
 /**
  * @endcond
