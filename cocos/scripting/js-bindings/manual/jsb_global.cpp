@@ -1227,12 +1227,6 @@ bool jsb_register_global_variables(se::Object* global)
     global->setProperty("performance", se::Value(performanceObj));
 
 
-    {
-        std::string printJSB = "console.log('jsb is defined! ', typeof jsb !== 'undefined')";
-        se::Value printRet;
-        se::ScriptEngine::getInstance()->evalString(printJSB.c_str(), printJSB.size(), &printRet, "callback in jsb_register_global_variables");
-    }
-
     se::ScriptEngine::getInstance()->clearException();
 
     se::ScriptEngine::getInstance()->addBeforeCleanupHook([](){

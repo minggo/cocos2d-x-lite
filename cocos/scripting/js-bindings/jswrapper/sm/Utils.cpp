@@ -70,12 +70,6 @@ namespace se {
             JS::RootedValue v(cx);
             seToJsValue(cx, arg, &v);
             outArr.append(v);
-
-            //TODO remove
-            JS::RootedString str(cx, JS::ToString(cx, v));
-            auto data = internal::jsToStdString(cx, str);
-            SE_LOGD("call arg[%d] : %s", i, data.c_str());
-            i++;
         }
     }
 
