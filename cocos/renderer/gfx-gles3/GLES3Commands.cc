@@ -639,8 +639,7 @@ void GLES3CmdFuncUpdateBuffer(GLES3Device* device, GLES3GPUBuffer* gpuBuffer, vo
   if (gpuBuffer->usage & GFXBufferUsageBit::INDIRECT) {
     memcpy((uint8_t*)gpuBuffer->indirectBuff.draws.data() + offset, buffer, size);
   }
-  else if (gpuBuffer->usage & GFXBufferUsageBit::TRANSFER_SRC ||
-           gpuBuffer->usage & GFXBufferUsageBit::TRANSFER_DST)
+  else if (gpuBuffer->usage & GFXBufferUsageBit::TRANSFER_SRC)
   {
       memcpy((uint8_t*)gpuBuffer->buffer + offset, buffer, size);
   }
