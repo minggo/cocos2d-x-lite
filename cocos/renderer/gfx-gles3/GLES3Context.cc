@@ -1,6 +1,7 @@
 #include "GLES3Std.h"
 #include "GLES3Context.h"
 #include "gles3w.h"
+#include "swappy/swappyGL.h"
 
 #if (CC_PLATFORM == CC_PLATFORM_ANDROID)
 #include "android/native_window.h"
@@ -353,7 +354,8 @@ bool GLES3Context::MakeCurrentImpl() {
 }
 
 void GLES3Context::present() {
-  eglSwapBuffers(_eglDisplay, _eglSurface);
+//  eglSwapBuffers(_eglDisplay, _eglSurface);
+    SwappyGL_swap(_eglDisplay, _eglSurface);
 }
 
 #endif

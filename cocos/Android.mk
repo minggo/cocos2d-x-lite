@@ -234,6 +234,7 @@ LOCAL_STATIC_LIBRARIES += cocos_webp_static
 LOCAL_STATIC_LIBRARIES += cocos_zlib_static
 LOCAL_STATIC_LIBRARIES += v8_static
 LOCAL_STATIC_LIBRARIES += android_native_app_glue
+LOCAL_STATIC_LIBRARIES += android_game_sdk
 
 LOCAL_WHOLE_STATIC_LIBRARIES := cocos2dxandroid_static
 LOCAL_WHOLE_STATIC_LIBRARIES += cpufeatures

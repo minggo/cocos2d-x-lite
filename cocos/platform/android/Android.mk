@@ -28,6 +28,8 @@ LOCAL_EXPORT_LDLIBS := -lGLESv2 \
                        -landroid
 
 LOCAL_STATIC_LIBRARIES := v8_static android_native_app_glue
+LOCAL_STATIC_LIBRARIES += android_game_sdk
 
 include $(BUILD_STATIC_LIBRARY)
 $(call import-module, android/native_app_glue)
+$(call import-module,android)

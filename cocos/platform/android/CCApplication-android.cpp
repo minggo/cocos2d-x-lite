@@ -32,6 +32,8 @@ THE SOFTWARE.
 #include "scripting/js-bindings/jswrapper/SeApi.h"
 #include "scripting/js-bindings/event/EventDispatcher.h"
 #include "platform/android/jni/JniHelper.h"
+#include "swappy/swappyGL.h"
+#include "swappy/swappyGL_extra.h"
 
 #define  LOG_APP_TAG    "CCApplication_android Debug"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_APP_TAG,__VA_ARGS__)
@@ -86,6 +88,7 @@ Application::~Application()
     EventDispatcher::destroy();
     se::ScriptEngine::destroyInstance();
 
+    SwappyGL_destroy();
     Application::_instance = nullptr;
 }
 
@@ -96,6 +99,9 @@ bool Application::init()
     se->addRegisterCallback(setCanvasCallback);
 
     EventDispatcher::init();
+
+    SwappyGL_init(JniHelper::getEnv(), JniHelper::getActivity());
+    SwappyGL_setAutoPipelineMode(true);
 
     return true;
 }
