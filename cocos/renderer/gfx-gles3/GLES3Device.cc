@@ -9,7 +9,6 @@
 #include "GLES3CommandBuffer.h"
 #include "GLES3Buffer.h"
 #include "GLES3Texture.h"
-#include "GLES3TextureView.h"
 #include "GLES3Sampler.h"
 #include "GLES3Shader.h"
 #include "GLES3InputAssembler.h"
@@ -218,15 +217,6 @@ GFXTexture *GLES3Device::createTexture(const GFXTextureInfo &info) {
         return texture;
 
     CC_SAFE_DESTROY(texture);
-    return nullptr;
-}
-
-GFXTextureView *GLES3Device::createTextureView(const GFXTextureViewInfo &info) {
-    GFXTextureView *texView = CC_NEW(GLES3TextureView(this));
-    if (texView->initialize(info))
-        return texView;
-
-    CC_SAFE_DESTROY(texView);
     return nullptr;
 }
 

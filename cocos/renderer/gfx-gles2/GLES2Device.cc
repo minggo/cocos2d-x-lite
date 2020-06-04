@@ -9,7 +9,6 @@
 #include "GLES2CommandBuffer.h"
 #include "GLES2Buffer.h"
 #include "GLES2Texture.h"
-#include "GLES2TextureView.h"
 #include "GLES2Sampler.h"
 #include "GLES2Shader.h"
 #include "GLES2InputAssembler.h"
@@ -223,15 +222,6 @@ GFXTexture *GLES2Device::createTexture(const GFXTextureInfo &info) {
         return texture;
 
     CC_SAFE_DESTROY(texture);
-    return nullptr;
-}
-
-GFXTextureView *GLES2Device::createTextureView(const GFXTextureViewInfo &info) {
-    GFXTextureView *texView = CC_NEW(GLES2TextureView(this));
-    if (texView->initialize(info))
-        return texView;
-
-    CC_SAFE_DESTROY(texView);
     return nullptr;
 }
 

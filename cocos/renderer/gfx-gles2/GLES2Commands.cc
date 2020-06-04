@@ -2,6 +2,7 @@
 #include "GLES2Commands.h"
 #include "GLES2Device.h"
 #include "GLES2StateCache.h"
+#include "GLES2Texture.h"
 
 #define BUFFER_OFFSET(idx) (static_cast<char *>(0) + (idx))
 
@@ -1120,21 +1121,21 @@ void GLES2CmdFuncCreateFramebuffer(GLES2Device *device, GLES2GPUFramebuffer *gpu
         GLenum attachments[GFX_MAX_ATTACHMENTS] = {0};
         uint attachment_count = 0;
 
-        for (size_t i = 0; i < gpuFBO->gpuColorViews.size(); ++i) {
-            GLES2GPUTextureView *gpuColorView = gpuFBO->gpuColorViews[i];
-            if (gpuColorView && gpuColorView->gpuTexture) {
-                glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)(GL_COLOR_ATTACHMENT0 + i), gpuColorView->gpuTexture->glTarget, gpuColorView->gpuTexture->glTexture, gpuColorView->baseLevel);
+        for (size_t i = 0; i < gpuFBO->gpuColorTextures.size(); ++i) {
+            GLES2GPUTexture *gpuColorTexture = gpuFBO->gpuColorTextures[i];
+            if (gpuColorTexture) {
+                glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)(GL_COLOR_ATTACHMENT0 + i), gpuColorTexture->glTarget, gpuColorTexture->glTexture, gpuColorTexture->mipLevel);
 
                 attachments[attachment_count++] = (GLenum)(GL_COLOR_ATTACHMENT0 + i);
             }
         }
 
-        if (gpuFBO->gpuDepthStencilView) {
-            GLES2GPUTextureView *gpuDepthStencilView = gpuFBO->gpuDepthStencilView;
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, gpuDepthStencilView->gpuTexture->glTarget, gpuDepthStencilView->gpuTexture->glTexture, gpuDepthStencilView->baseLevel);
+        if (gpuFBO->gpuDepthStencilTexture) {
+            GLES2GPUTexture *gpuDepthStencilTexture = gpuFBO->gpuDepthStencilTexture;
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, gpuDepthStencilTexture->glTarget, gpuDepthStencilTexture->glTexture, gpuDepthStencilTexture->mipLevel);
 
-            if (GFX_FORMAT_INFOS[(int)gpuDepthStencilView->format].hasStencil) {
-                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, gpuDepthStencilView->gpuTexture->glTarget, gpuDepthStencilView->gpuTexture->glTexture, gpuDepthStencilView->baseLevel);
+            if (GFX_FORMAT_INFOS[(int)gpuDepthStencilTexture->format].hasStencil) {
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, gpuDepthStencilTexture->glTarget, gpuDepthStencilTexture->glTexture, gpuDepthStencilTexture->mipLevel);
             }
         }
 
@@ -1710,8 +1711,8 @@ void GLES2CmdFuncExecuteCmds(GLES2Device *device, GLES2CmdPackage *cmd_package) 
                                         if (gpuSampler.binding == gpuBinding.binding) {
                                             for (size_t u = 0; u < gpuSampler.units.size(); ++u) {
                                                 uint unit = (uint)gpuSampler.units[u];
-                                                if (gpuBinding.gpuTexView && (gpuBinding.gpuTexView->gpuTexture->size > 0)) {
-                                                    GLES2GPUTexture *gpuTexture = gpuBinding.gpuTexView->gpuTexture;
+                                                if (gpuBinding.gpuTexture && (gpuBinding.gpuTexture->size > 0)) {
+                                                    GLES2GPUTexture *gpuTexture = gpuBinding.gpuTexture;
                                                     GLuint glTexture = gpuTexture->glTexture;
                                                     if (cache->glTextures[unit] != glTexture) {
                                                         if (cache->texUint != unit) {
@@ -1722,12 +1723,12 @@ void GLES2CmdFuncExecuteCmds(GLES2Device *device, GLES2CmdPackage *cmd_package) 
                                                         cache->glTextures[unit] = glTexture;
                                                     }
 
-                                                    if (gpuBinding.gpuTexView->gpuTexture->isPowerOf2) {
+                                                    if (gpuBinding.gpuTexture->isPowerOf2) {
                                                         glWrapS = gpuBinding.gpuSampler->glWrapS;
                                                         glWrapT = gpuBinding.gpuSampler->glWrapT;
 
-                                                        if (gpuBinding.gpuTexView->gpuTexture->mipLevel <= 1 &&
-                                                            !(gpuBinding.gpuTexView->gpuTexture->flags & GFXTextureFlagBit::GEN_MIPMAP) &&
+                                                        if (gpuBinding.gpuTexture->mipLevel <= 1 &&
+                                                            !(gpuBinding.gpuTexture->flags & GFXTextureFlagBit::GEN_MIPMAP) &&
                                                             (gpuBinding.gpuSampler->glMinFilter == GL_LINEAR_MIPMAP_NEAREST ||
                                                              gpuBinding.gpuSampler->glMinFilter == GL_LINEAR_MIPMAP_LINEAR)) {
                                                             glMinFilter = GL_LINEAR;

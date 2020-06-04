@@ -1,7 +1,7 @@
 #include "MTLStd.h"
 #include "MTLFrameBuffer.h"
 #include "MTLRenderPass.h"
-#include "MTLTextureView.h"
+#include "MTLTexture.h"
 
 NS_CC_BEGIN
 
@@ -11,22 +11,22 @@ CCMTLFramebuffer::~CCMTLFramebuffer() { destroy(); }
 bool CCMTLFramebuffer::initialize(const GFXFramebufferInfo& info)
 {
     _renderPass = info.renderPass;
-    _colorViews = info.colorViews;
-    _depthStencilView = info.depthStencilView;
+    _colorTextures = info.colorTextures;
+    _depthStencilTexture = info.depthStencilTexture;
     _isOffscreen = info.isOffscreen;
     
     if(_isOffscreen)
     {
         auto* mtlRenderPass = static_cast<CCMTLRenderPass*>(_renderPass);
         size_t slot = 0;
-        for (const auto& colorView : info.colorViews) {
-            id<MTLTexture> texture = static_cast<CCMTLTextureView*>(colorView)->getMTLTexture();
+        for (const auto& colorTexture : info.colorTextures) {
+            id<MTLTexture> texture = static_cast<CCMTLTexture*>(colorTexture)->getMTLTexture();
             mtlRenderPass->setColorAttachment(texture, slot);
         }
 
-        if(_depthStencilView)
+        if(_depthStencilTexture)
         {
-            id<MTLTexture> texture = static_cast<CCMTLTextureView*>(_depthStencilView)->getMTLTexture();
+            id<MTLTexture> texture = static_cast<CCMTLTexture*>(_depthStencilTexture)->getMTLTexture();
             mtlRenderPass->setDepthStencilAttachment(texture);
         }
     }

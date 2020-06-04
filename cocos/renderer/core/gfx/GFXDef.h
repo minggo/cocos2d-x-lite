@@ -864,12 +864,12 @@ struct GFXRenderPassInfo {
   GFXSubPassList subPasses;
 };
 
-typedef vector<GFXTextureView*>::type GFXTextureViewList;
+typedef vector<GFXTexture*>::type GFXTextureList;
 
 struct GFXFramebufferInfo {
   GFXRenderPass* renderPass = nullptr;
-  GFXTextureViewList colorViews;
-  GFXTextureView* depthStencilView = nullptr;
+  GFXTextureList colorTextures;
+  GFXTexture* depthStencilTexture = nullptr;
   bool isOffscreen = true;
 };
 
@@ -894,7 +894,7 @@ struct GFXBindingUnit {
   String name;
   uint count = 0;
   GFXBuffer* buffer = nullptr;
-  GFXTextureView* texView = nullptr;
+  GFXTexture* texture = nullptr;
   GFXSampler* sampler = nullptr;
 };
 

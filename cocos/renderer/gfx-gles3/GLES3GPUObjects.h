@@ -46,16 +46,7 @@ public:
     GLenum glMagFilter = 0;
 };
 
-class GLES3GPUTextureView : public Object {
-public:
-    GLES3GPUTexture *gpuTexture = nullptr;
-    GFXTextureViewType type = GFXTextureViewType::TV2D;
-    GFXFormat format = GFXFormat::UNKNOWN;
-    uint baseLevel = 0;
-    uint levelCount = 1;
-};
-
-typedef vector<GLES3GPUTextureView *>::type GLES3GPUTextureViewList;
+typedef vector<GLES3GPUTexture *>::type GLES3GPUTextureList;
 
 class GLES3GPUSampler : public Object {
 public:
@@ -176,8 +167,8 @@ public:
 class GLES3GPUFramebuffer : public Object {
 public:
     GLES3GPURenderPass *gpuRenderPass = nullptr;
-    GLES3GPUTextureViewList gpuColorViews;
-    GLES3GPUTextureView *gpuDepthStencilView = nullptr;
+    GLES3GPUTextureList gpuColorTextures;
+    GLES3GPUTexture *gpuDepthStencilTexture = nullptr;
     bool isOffscreen = false;
     GLuint glFramebuffer = 0;
 };
@@ -203,7 +194,7 @@ struct GLES3GPUBinding {
     GFXBindingType type = GFXBindingType::UNKNOWN;
     String name;
     GLES3GPUBuffer *gpuBuffer = nullptr;
-    GLES3GPUTextureView *gpuTexView = nullptr;
+    GLES3GPUTexture *gpuTexture = nullptr;
     GLES3GPUSampler *gpuSampler = nullptr;
 };
 typedef vector<GLES3GPUBinding>::type GLES3GPUBindingList;

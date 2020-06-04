@@ -14,7 +14,6 @@
 #include "MTLPipelineState.h"
 #include "MTLShader.h"
 #include "MTLTexture.h"
-#include "MTLTextureView.h"
 #include "MTLSampler.h"
 #include "MTLUtils.h"
 #include "MTLFence.h"
@@ -203,16 +202,6 @@ GFXTexture* CCMTLDevice::createTexture(const GFXTextureInfo& info)
         return texture;
     
     CC_SAFE_DESTROY(texture);
-    return nullptr;
-}
-
-GFXTextureView* CCMTLDevice::createTextureView(const GFXTextureViewInfo& info)
-{
-    auto textureView = CC_NEW(CCMTLTextureView(this) );
-    if (textureView && textureView->initialize(info) )
-        return textureView;
-    
-    CC_SAFE_DESTROY(textureView);
     return nullptr;
 }
 

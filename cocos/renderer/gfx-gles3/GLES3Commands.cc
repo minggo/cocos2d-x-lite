@@ -1239,19 +1239,19 @@ void GLES3CmdFuncCreateFramebuffer(GLES3Device *device, GLES3GPUFramebuffer *gpu
         GLenum attachments[GFX_MAX_ATTACHMENTS] = {0};
         uint attachment_count = 0;
 
-        for (size_t i = 0; i < gpuFBO->gpuColorViews.size(); ++i) {
-            GLES3GPUTextureView *gpuColorView = gpuFBO->gpuColorViews[i];
-            if (gpuColorView && gpuColorView->gpuTexture) {
-                glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)(GL_COLOR_ATTACHMENT0 + i), gpuColorView->gpuTexture->glTarget, gpuColorView->gpuTexture->glTexture, gpuColorView->baseLevel);
+        for (size_t i = 0; i < gpuFBO->gpuColorTextures.size(); ++i) {
+            GLES3GPUTexture *gpuColorTexture = gpuFBO->gpuColorTextures[i];
+            if (gpuColorTexture) {
+                glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)(GL_COLOR_ATTACHMENT0 + i), gpuColorTexture->glTarget, gpuColorTexture->glTexture, gpuColorTexture->mipLevel);
 
                 attachments[attachment_count++] = (GLenum)(GL_COLOR_ATTACHMENT0 + i);
             }
         }
 
-        if (gpuFBO->gpuDepthStencilView) {
-            GLES3GPUTextureView *gpuDepthStencilView = gpuFBO->gpuDepthStencilView;
-            const GLenum gl_attachment = GFX_FORMAT_INFOS[(int)gpuDepthStencilView->format].hasStencil ? GL_DEPTH_STENCIL_ATTACHMENT : GL_DEPTH_ATTACHMENT;
-            glFramebufferTexture2D(GL_FRAMEBUFFER, gl_attachment, gpuDepthStencilView->gpuTexture->glTarget, gpuDepthStencilView->gpuTexture->glTexture, gpuDepthStencilView->baseLevel);
+        if (gpuFBO->gpuDepthStencilTexture) {
+            GLES3GPUTexture *gpuDepthStencilTexture = gpuFBO->gpuDepthStencilTexture;
+            const GLenum gl_attachment = GFX_FORMAT_INFOS[(int)gpuDepthStencilTexture->format].hasStencil ? GL_DEPTH_STENCIL_ATTACHMENT : GL_DEPTH_ATTACHMENT;
+            glFramebufferTexture2D(GL_FRAMEBUFFER, gl_attachment, gpuDepthStencilTexture->glTarget, gpuDepthStencilTexture->glTexture, gpuDepthStencilTexture->mipLevel);
         }
 
         glDrawBuffers(attachment_count, attachments);
@@ -1743,14 +1743,14 @@ void GLES3CmdFuncExecuteCmds(GLES3Device *device, GLES3CmdPackage *cmd_package) 
                                             for (size_t u = 0; u < gpuSampler.units.size(); ++u) {
                                                 uint unit = (uint)gpuSampler.units[u];
 
-                                                if (gpuBinding.gpuTexView && (gpuBinding.gpuTexView->gpuTexture->size > 0)) {
-                                                    GLuint glTexture = gpuBinding.gpuTexView->gpuTexture->glTexture;
+                                                if (gpuBinding.gpuTexture && (gpuBinding.gpuTexture->size > 0)) {
+                                                    GLuint glTexture = gpuBinding.gpuTexture->glTexture;
                                                     if (cache->glTextures[unit] != glTexture) {
                                                         if (cache->texUint != unit) {
                                                             glActiveTexture(GL_TEXTURE0 + unit);
                                                             cache->texUint = unit;
                                                         }
-                                                        glBindTexture(gpuBinding.gpuTexView->gpuTexture->glTarget, glTexture);
+                                                        glBindTexture(gpuBinding.gpuTexture->glTarget, glTexture);
                                                         cache->glTextures[unit] = glTexture;
                                                     }
 
