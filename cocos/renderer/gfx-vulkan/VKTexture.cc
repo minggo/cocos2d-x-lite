@@ -112,6 +112,12 @@ bool CCVKTexture::initialize(const GFXTextureInfo &info)
     return true;
 }
 
+bool CCVKTexture::initialize(const GFXTextureViewInfo& info)
+{
+    //TODO
+    return true;
+}
+
 void CCVKTexture::destroy()
 {
     if (_gpuTexture)

@@ -12,6 +12,7 @@ class CC_VULKAN_API CCVKTexture : public GFXTexture {
   
  public:
   bool initialize(const GFXTextureInfo& info);
+  bool initialize(const GFXTextureViewInfo& info);
   void destroy();
   void resize(uint width, uint height);
   

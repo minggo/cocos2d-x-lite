@@ -32,7 +32,7 @@ public:
     GFXCommandBuffer* createCommandBuffer(const GFXCommandBufferInfo& info) override;
     GFXBuffer* createBuffer(const GFXBufferInfo& info) override;
     GFXTexture* createTexture(const GFXTextureInfo& info) override;
-    GFXTextureView* createTextureView(const GFXTextureViewInfo& info) override;
+    GFXTexture* createTexture(const GFXTextureViewInfo& info) override;
     GFXSampler* createSampler(const GFXSamplerInfo& info) override;
     GFXShader* createShader(const GFXShaderInfo& info) override;
     GFXInputAssembler* createInputAssembler(const GFXInputAssemblerInfo& info) override;

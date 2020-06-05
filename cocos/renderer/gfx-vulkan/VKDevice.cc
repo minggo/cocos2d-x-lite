@@ -590,13 +590,13 @@ GFXTexture* CCVKDevice::createTexture(const GFXTextureInfo& info)
     return nullptr;
 }
 
-GFXTextureView* CCVKDevice::createTextureView(const GFXTextureViewInfo& info)
+GFXTexture* CCVKDevice::createTexture(const GFXTextureViewInfo& info)
 {
-    GFXTextureView* texView = CC_NEW(CCVKTextureView(this));
-    if (texView->initialize(info))
-        return texView;
+    GFXTexture* texture = CC_NEW(CCVKTexture(this));
+    if (texture->initialize(info))
+        return texture;
 
-    CC_SAFE_DESTROY(texView);
+    CC_SAFE_DESTROY(texture);
     return nullptr;
 }
 
