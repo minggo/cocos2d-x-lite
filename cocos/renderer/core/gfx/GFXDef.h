@@ -299,6 +299,9 @@ enum class GFXTextureType {
   TEX1D,
   TEX2D,
   TEX3D,
+    CUBE,
+    TEX1D_ARRAY,
+    TEX2D_ARRAY,
 };
 
 enum class GFXTextureUsageBit : FlagBits {
@@ -332,15 +335,6 @@ enum class GFXSampleCount : uint8_t {
   X16,
   X32,
   X64,
-};
-
-enum class GFXTextureViewType : uint8_t {
-  TV1D,
-  TV2D,
-  TV3D,
-  CUBE,
-  TV1D_ARRAY,
-  TV2D_ARRAY,
 };
 
 enum class GFXFilter : uint8_t {
@@ -725,7 +719,7 @@ struct GFXTextureInfo {
 
 struct GFXTextureViewInfo {
   GFXTexture* texture = nullptr;
-  GFXTextureViewType type = GFXTextureViewType::TV2D;
+  GFXTextureType type = GFXTextureType::TEX2D;
   GFXFormat format = GFXFormat::UNKNOWN;
   uint baseLevel = 0;
   uint levelCount = 1;

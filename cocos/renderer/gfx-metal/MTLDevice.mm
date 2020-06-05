@@ -205,6 +205,16 @@ GFXTexture* CCMTLDevice::createTexture(const GFXTextureInfo& info)
     return nullptr;
 }
 
+GFXTexture* CCMTLDevice::createTexture(const GFXTextureViewInfo& info)
+{
+    auto texture = CC_NEW(CCMTLTexture(this) );
+    if (texture && texture->initialize(info) )
+        return texture;
+    
+    CC_SAFE_DESTROY(texture);
+    return nullptr;
+}
+
 GFXSampler* CCMTLDevice::createSampler(const GFXSamplerInfo& info)
 {
     auto sampler = CC_NEW(CCMTLSampler(this) );

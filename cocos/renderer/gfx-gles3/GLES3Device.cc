@@ -220,6 +220,15 @@ GFXTexture *GLES3Device::createTexture(const GFXTextureInfo &info) {
     return nullptr;
 }
 
+GFXTexture *GLES3Device::createTexture(const GFXTextureViewInfo &info) {
+    GFXTexture *texture = CC_NEW(GLES3Texture(this));
+    if (texture->initialize(info))
+        return texture;
+    
+    CC_SAFE_DESTROY(texture);
+    return nullptr;
+}
+
 GFXSampler *GLES3Device::createSampler(const GFXSamplerInfo &info) {
     GFXSampler *sampler = CC_NEW(GLES3Sampler(this));
     if (sampler->initialize(info))

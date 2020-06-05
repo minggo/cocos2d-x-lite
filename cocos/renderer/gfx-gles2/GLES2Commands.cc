@@ -613,9 +613,8 @@ void GLES2CmdFuncCreateTexture(GLES2Device *device, GLES2GPUTexture *gpuTexture)
     gpuTexture->glFormat = MapGLFormat(gpuTexture->format);
     gpuTexture->glType = GFXFormatToGLType(gpuTexture->format);
 
-    switch (gpuTexture->viewType) {
-        case GFXTextureViewType::TV2D: {
-            gpuTexture->viewType = GFXTextureViewType::TV2D;
+    switch (gpuTexture->type) {
+        case GFXTextureType::TEX2D: {
             gpuTexture->glTarget = GL_TEXTURE_2D;
             glGenTextures(1, &gpuTexture->glTexture);
             if (gpuTexture->size > 0) {
@@ -643,8 +642,7 @@ void GLES2CmdFuncCreateTexture(GLES2Device *device, GLES2GPUTexture *gpuTexture)
             }
             break;
         }
-        case GFXTextureViewType::CUBE: {
-            gpuTexture->viewType = GFXTextureViewType::CUBE;
+        case GFXTextureType::CUBE: {
             gpuTexture->glTarget = GL_TEXTURE_CUBE_MAP;
             glGenTextures(1, &gpuTexture->glTexture);
             if (gpuTexture->size > 0) {
@@ -688,12 +686,12 @@ void GLES2CmdFuncDestroyTexture(GLES2Device *device, GLES2GPUTexture *gpuTexture
     if (gpuTexture->glTexture) {
         GLuint &glTexture = device->stateCache->glTextures[device->stateCache->texUint];
         if (glTexture == gpuTexture->glTexture) {
-            switch (gpuTexture->viewType) {
-                case GFXTextureViewType::TV2D: {
+            switch (gpuTexture->type) {
+                case GFXTextureType::TEX2D: {
                     glBindTexture(GL_TEXTURE_2D, 0);
                     break;
                 }
-                case GFXTextureViewType::CUBE: {
+                case GFXTextureType::CUBE: {
                     glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
                     break;
                 }
@@ -710,9 +708,8 @@ void GLES2CmdFuncResizeTexture(GLES2Device *device, GLES2GPUTexture *gpuTexture)
     gpuTexture->glFormat = MapGLFormat(gpuTexture->format);
     gpuTexture->glType = GFXFormatToGLType(gpuTexture->format);
 
-    switch (gpuTexture->viewType) {
-        case GFXTextureViewType::TV2D: {
-            gpuTexture->viewType = GFXTextureViewType::TV2D;
+    switch (gpuTexture->type) {
+        case GFXTextureType::TEX2D: {
             gpuTexture->glTarget = GL_TEXTURE_2D;
             if (gpuTexture->size > 0) {
                 GLuint &glTexture = device->stateCache->glTextures[device->stateCache->texUint];
@@ -739,8 +736,7 @@ void GLES2CmdFuncResizeTexture(GLES2Device *device, GLES2GPUTexture *gpuTexture)
             }
             break;
         }
-        case GFXTextureViewType::CUBE: {
-            gpuTexture->viewType = GFXTextureViewType::CUBE;
+        case GFXTextureType::CUBE: {
             gpuTexture->glTarget = GL_TEXTURE_CUBE_MAP;
             if (gpuTexture->size > 0) {
                 GLuint &glTexture = device->stateCache->glTextures[device->stateCache->texUint];
