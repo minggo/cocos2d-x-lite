@@ -170,6 +170,8 @@ public:
     GLES3GPUTexture *gpuDepthStencilTexture = nullptr;
     bool isOffscreen = false;
     GLuint glFramebuffer = 0;
+    GLint depstencilMipmapLevel = 0;
+    vector<GLint>::type colorMipmapLevels;
 };
 
 class GLES3GPUPipelineLayout : public Object {

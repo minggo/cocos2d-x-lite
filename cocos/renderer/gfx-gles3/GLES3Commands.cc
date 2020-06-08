@@ -1235,10 +1235,15 @@ void GLES3CmdFuncCreateFramebuffer(GLES3Device *device, GLES3GPUFramebuffer *gpu
         GLenum attachments[GFX_MAX_ATTACHMENTS] = {0};
         uint attachment_count = 0;
 
+        size_t colorMipmapLevelCount = gpuFBO->colorMipmapLevels.size();
         for (size_t i = 0; i < gpuFBO->gpuColorTextures.size(); ++i) {
             GLES3GPUTexture *gpuColorTexture = gpuFBO->gpuColorTextures[i];
             if (gpuColorTexture) {
-                glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)(GL_COLOR_ATTACHMENT0 + i), gpuColorTexture->glTarget, gpuColorTexture->glTexture, gpuColorTexture->mipLevel);
+                GLint mipmapLevel = 0;
+                if (colorMipmapLevelCount >= i) {
+                    mipmapLevel = gpuFBO->colorMipmapLevels[i];
+                }
+                glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)(GL_COLOR_ATTACHMENT0 + i), gpuColorTexture->glTarget, gpuColorTexture->glTexture, mipmapLevel);
 
                 attachments[attachment_count++] = (GLenum)(GL_COLOR_ATTACHMENT0 + i);
             }
@@ -1247,7 +1252,7 @@ void GLES3CmdFuncCreateFramebuffer(GLES3Device *device, GLES3GPUFramebuffer *gpu
         if (gpuFBO->gpuDepthStencilTexture) {
             GLES3GPUTexture *gpuDepthStencilTexture = gpuFBO->gpuDepthStencilTexture;
             const GLenum gl_attachment = GFX_FORMAT_INFOS[(int)gpuDepthStencilTexture->format].hasStencil ? GL_DEPTH_STENCIL_ATTACHMENT : GL_DEPTH_ATTACHMENT;
-            glFramebufferTexture2D(GL_FRAMEBUFFER, gl_attachment, gpuDepthStencilTexture->glTarget, gpuDepthStencilTexture->glTexture, gpuDepthStencilTexture->mipLevel);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, gl_attachment, gpuDepthStencilTexture->glTarget, gpuDepthStencilTexture->glTexture, gpuFBO->depstencilMipmapLevel);
         }
 
         glDrawBuffers(attachment_count, attachments);

@@ -70,7 +70,7 @@ bool CCMTLWindow::initialize(const GFXWindowInfo& info)
             if (_colorTex)
             {
                 id<MTLTexture> mtlTexture = static_cast<CCMTLTexture*>(_colorTex)->getMTLTexture();
-                static_cast<CCMTLRenderPass*>(_renderPass)->setColorAttachment(mtlTexture, 0);
+                static_cast<CCMTLRenderPass*>(_renderPass)->setColorAttachment(0, mtlTexture, 0);
             }
         }
         if (_depthStencilFmt != GFXFormat::UNKNOWN) {
@@ -88,7 +88,7 @@ bool CCMTLWindow::initialize(const GFXWindowInfo& info)
             if (_depthStencilTex)
             {
                 id<MTLTexture> mtlTexture = static_cast<CCMTLTexture*>(_depthStencilTex)->getMTLTexture();
-                static_cast<CCMTLRenderPass*>(_renderPass)->setDepthStencilAttachment(mtlTexture);
+                static_cast<CCMTLRenderPass*>(_renderPass)->setDepthStencilAttachment(mtlTexture, 0);
             }
         }
     }

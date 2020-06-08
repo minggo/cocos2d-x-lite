@@ -863,7 +863,9 @@ typedef vector<GFXTexture*>::type GFXTextureList;
 struct GFXFramebufferInfo {
   GFXRenderPass* renderPass = nullptr;
   GFXTextureList colorTextures;
+  vector<int>::type colorMipmapLevels;
   GFXTexture* depthStencilTexture = nullptr;
+  int depthStencilMipmapLevel = 0;
   bool isOffscreen = true;
 };
 

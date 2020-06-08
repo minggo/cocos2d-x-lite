@@ -23,6 +23,8 @@ bool GLES3Framebuffer::initialize(const GFXFramebufferInfo &info) {
 
     _gpuFBO = CC_NEW(GLES3GPUFramebuffer);
     _gpuFBO->gpuRenderPass = ((GLES3RenderPass *)_renderPass)->gpuRenderPass();
+    _gpuFBO->depstencilMipmapLevel = info.depthStencilMipmapLevel;
+    _gpuFBO->colorMipmapLevels = info.colorMipmapLevels;
 
     if (_isOffscreen) {
         _gpuFBO->gpuColorTextures.resize(_colorTextures.size());

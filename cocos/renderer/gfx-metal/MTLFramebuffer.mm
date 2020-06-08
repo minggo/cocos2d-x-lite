@@ -19,15 +19,23 @@ bool CCMTLFramebuffer::initialize(const GFXFramebufferInfo& info)
     {
         auto* mtlRenderPass = static_cast<CCMTLRenderPass*>(_renderPass);
         size_t slot = 0;
+        size_t levelCount = info.colorMipmapLevels.size();
+        int i = 0;
         for (const auto& colorTexture : info.colorTextures) {
+            int level = 0;
+            if (levelCount > i) {
+                level = info.colorMipmapLevels[i];
+            }
             id<MTLTexture> texture = static_cast<CCMTLTexture*>(colorTexture)->getMTLTexture();
-            mtlRenderPass->setColorAttachment(texture, slot);
+            mtlRenderPass->setColorAttachment(slot, texture, level);
+            
+            ++i;
         }
 
         if(_depthStencilTexture)
         {
             id<MTLTexture> texture = static_cast<CCMTLTexture*>(_depthStencilTexture)->getMTLTexture();
-            mtlRenderPass->setDepthStencilAttachment(texture);
+            mtlRenderPass->setDepthStencilAttachment(texture, info.depthStencilMipmapLevel);
         }
     }
     

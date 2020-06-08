@@ -20,6 +20,19 @@ bool GLES2Framebuffer::initialize(const GFXFramebufferInfo &info) {
     _colorTextures = info.colorTextures;
     _depthStencilTexture = info.depthStencilTexture;
     _isOffscreen = info.isOffscreen;
+    
+    if (info.depthStencilMipmapLevel != 0) {
+        CC_LOG_WARNING("Mipmap level of depth stencil attachment should be 0 in GLES2. Convert to 0.");
+    }
+    if (info.colorMipmapLevels.size() > 0) {
+        int i = 0;
+        for (const mipmapLevel : colorMipmapLevels) {
+            if (mipmapLevel != 0) {
+                CC_LOG_WARNING("Mipmap level of color attachment %d should be 0 in GLES2. Convert to 0.", i);
+            }
+            ++i;
+        }
+    }
 
     _gpuFBO = CC_NEW(GLES2GPUFramebuffer);
     _gpuFBO->gpuRenderPass = ((GLES2RenderPass *)_renderPass)->gpuRenderPass();
