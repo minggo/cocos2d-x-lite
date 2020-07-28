@@ -7,27 +7,24 @@ namespace pipeline {
 struct Pass;
 struct RnederPriority;
 
-struct CC_DLL PSOCreateInfo {
-public:
-    gfx::Shader* shader = nullptr;
-    gfx::PrimitiveMode primitive = gfx::PrimitiveMode::TRIANGLE_LIST;
-    gfx::RasterizerState rasterizerState;
-    gfx::DepthStencilState depthStencilState;
-    gfx::BlendState blendState;
-    gfx::DynamicStateList dynamicStates;
-    gfx::BindingLayout* bindingLayout;
+struct CC_DLL PSOInfo {
+    uint shaderIndex = 0;//gfx::Shader*
+    uint primitive = (uint)gfx::PrimitiveMode::TRIANGLE_LIST; //gfx::PrimitiveMode
+    gfx::RasterizerState rs;
+    gfx::DepthStencilState ds;
+    gfx::BlendState bs;
+    uint dynamicStatesIndex = 0; //gfx::DynamicStateList
+    uint dynamicStatesCount = 0;
+    uint bindingLayoutIndex = 0; //gfx:::BindingLayout*
     uint hash = 0;
 };
-typedef vector<PSOCreateInfo> PSOCreateInfoList;
 
 struct CC_DLL SubModel {
-public:
-    vector<Pass *> passes;
-    PSOCreateInfoList psoInfos;
-    RenderPriority priority = RenderPriority::DEFAULT;
-    gfx::InputAssembler *inputAssembler = nullptr;
+    uint passesIndex = 0; //vector<Pass *>
+    uint psoInfosIndex = 0; //PSOCreateInfoList
+    uint priority = (uint)RenderPriority::DEFAULT; //RenderPriority
+    uint inputAssemblerIndex = 0; //gfx::InputAssembler *
 };
-typedef vector<SubModel *> SubModelList;
 
 } //namespace pipeline
 } //namespace cc

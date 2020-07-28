@@ -7,7 +7,7 @@ namespace pipeline {
 
 struct Pass;
 struct SubModel;
-struct PSOCreateInfo;
+struct PSOInfo;
 
 
 struct CC_DLL BatchedItem {
@@ -18,7 +18,7 @@ struct CC_DLL BatchedItem {
     uint mergCount = 0;
     gfx::InputAssembler *ia = nullptr;
     gfx::Buffer *ubo = nullptr;
-    PSOCreateInfo *psoCreatedInfo = nullptr;
+    PSOInfo *psoInfo = nullptr;
 };
 typedef vector<BatchedItem> BatchedItemList;
 

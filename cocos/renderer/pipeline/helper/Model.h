@@ -4,11 +4,9 @@
 namespace cc {
 namespace pipeline {
 
-struct SubModel;
-
 struct CC_DLL Model {
 public:
-    vector<SubModel *> subModels;
+    uint subModelsIndex = 0; //vector<SubModel *>
     
 };
 

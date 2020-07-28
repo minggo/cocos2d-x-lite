@@ -17,10 +17,9 @@ enum class CC_DLL RenderPriority : uint8_t {
 };
 
 struct CC_DLL RenderObject {
-    Model *model = nullptr;
+    uint modelIndex = 0; //Model *
     uint depth = 0;
 };
-typedef vector<struct RenderObject> RenderObjectList;
 
 struct CC_DLL RenderTargetInfo {
     uint width = 0;

@@ -6,6 +6,7 @@
 #include "helper/Model.h"
 #include "helper/SubModel.h"
 #include "helper/Pass.h"
+#include "helper/Pool.h"
 
 namespace cc {
 namespace pipeline {
@@ -20,10 +21,12 @@ void RenderQueue::clear() {
 }
 
 bool RenderQueue::insertRenderPass(const RenderObject &renderObj, uint subModelIdx, uint passIdx) {
-    auto *subModel = renderObj.model->subModels[subModelIdx];
-    const auto *pass = subModel->passes[passIdx];
-    const auto &psoInfo = subModel->psoInfos[passIdx];
-    const auto isTransparent = psoInfo.blendState.targets[0].blend;
+    const auto *model = ModelPool::getModel(renderObj.modelIndex);
+    auto *subModel = SubModelPool::getSubModel(model->subModelsIndex) + subModelIdx;
+    const auto *pass = PassPool::getPass(subModel->passesIndex) + passIdx;
+    const auto *psoInfo = PSOInfoPool::getPSOInfo(subModel->psoInfosIndex) + passIdx;
+    const auto &blendTargets = BlendTargetPool::getBlendTarget(psoInfo->bs.targetIndex, psoInfo->bs.targetCount);
+    const auto isTransparent = blendTargets[0].blend();
 
     if (isTransparent != _passDesc.isTransparent || !(pass->phase & _passDesc.phases)) {
         return false;
@@ -33,7 +36,7 @@ bool RenderQueue::insertRenderPass(const RenderObject &renderObj, uint subModelI
     RenderPass renderPass;
     renderPass.hash = hash;
     renderPass.depth = renderObj.depth;
-    renderPass.shaderID = psoInfo.shader->getHash();
+    renderPass.shaderID = ShaderPool::getShader(psoInfo->shaderIndex)->getHash();
     renderPass.index = passIdx;
     renderPass.subModel = subModel;
 
@@ -49,8 +52,8 @@ void RenderQueue::recordCommandBuffer(gfx::Device *device, gfx::RenderPass *rend
     for (size_t i = 0; i < _queue.size(); ++i) {
         const auto *subModel = _queue[i].subModel;
         const auto passIdx = _queue[i].index;
-        auto *ia = subModel->inputAssembler;
-        const auto &psoInfo = subModel->psoInfos[passIdx];
+        auto *ia = InputAssemblerPool::getInputAssembler(subModel->inputAssemblerIndex);
+        const auto *psoInfo = PSOInfoPool::getPSOInfo(subModel->psoInfosIndex) + passIdx;
         auto *pso = PipelineStateManager::getOrCreatePipelineStage(device, psoInfo, renderPass, ia);
         cmdBuff->bindPipelineState(pso);
         cmdBuff->bindBindingLayout(psoInfo.bindingLayout);

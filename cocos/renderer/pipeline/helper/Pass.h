@@ -5,9 +5,8 @@ namespace cc {
 namespace pipeline {
 
 struct CC_DLL Pass {
-public:
     uint phase;
-    RenderPriority priority = RenderPriority::DEFAULT;
+    uint priority = (uint)RenderPriority::DEFAULT;
 };
 
 } // namespace pipeline

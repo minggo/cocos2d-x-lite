@@ -13,14 +13,14 @@ class RenderPass;
 
 namespace pipeline {
 
-struct PSOCreateInfo;
+struct PSOInfo;
 
 class CC_DLL PipelineStateManager {
 public:
     static gfx::PipelineState *getOrCreatePipelineStage(gfx::Device *device,
-                                                           const PSOCreateInfo &PSOInfo,
-                                                           gfx::RenderPass *renderPass,
-                                                           gfx::InputAssembler *inputAssembler);
+                                                        const PSOInfo *PSOInfo,
+                                                        gfx::RenderPass *renderPass,
+                                                        gfx::InputAssembler *inputAssembler);
     
 private:
     static map<uint, gfx::PipelineState *> _PSOHashMap;
