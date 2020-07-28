@@ -13,7 +13,7 @@ struct CC_DLL RenderFlowInfo {
     //TODO
 };
 
-class CC_DLL RenderFlow : public gfx::Object {
+class CC_DLL RenderFlow : public Object {
 public:
     RenderFlow() = default;
     virtual ~RenderFlow() = default;

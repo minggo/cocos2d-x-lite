@@ -31,7 +31,7 @@ struct CC_DLL RenderPipelineInfo {
     bool enableIBL = false;
 };
 
-class CC_DLL RenderPipeline : public gfx::Object {
+class CC_DLL RenderPipeline : public Object {
 public:
     virtual ~RenderPipeline() = default;
 

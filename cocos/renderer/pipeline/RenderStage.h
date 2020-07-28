@@ -21,7 +21,7 @@ struct CC_DLL RenderStageInfo {
     // renderQueues?: RenderQueueDesc[];
 };
 
-class CC_DLL RenderStage : public gfx::Object {
+class CC_DLL RenderStage : public Object {
 public:
     RenderStage() = default;
     virtual ~RenderStage() = default;

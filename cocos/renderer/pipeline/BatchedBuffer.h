@@ -20,7 +20,7 @@ struct CC_DLL BatchedItem {
 };
 typedef vector<BatchedItem> BatchedItemList;
 
-class CC_DLL BatchedBuffer : public gfx::Object {
+class CC_DLL BatchedBuffer : public Object {
 public:
     BatchedBuffer(cc::Pass *pass);
     ~BatchedBuffer() = default;
