@@ -528,6 +528,8 @@ cocos_source_files(
     cocos/renderer/pipeline/forward/ForwardPipeline.h
     cocos/renderer/pipeline/forward/ForwardStage.cpp
     cocos/renderer/pipeline/forward/ForwardStage.h
+    cocos/renderer/pipeline/helper/DefineMap.h
+    cocos/renderer/pipeline/helper/DefineMap.cpp
 )
 
 if(CC_USE_GLES2)

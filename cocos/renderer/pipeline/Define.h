@@ -25,19 +25,54 @@ struct CC_DLL RenderPass {
     uint hash = 0;
     uint depth = 0;
     uint shaderID = 0;
-    uint passIdx = 0;
+    uint index = 0;
     SubModel *subModel = nullptr;
 };
 typedef vector<RenderPass> RenderPassList;
 
+typedef gfx::ColorAttachment ColorDesc;
+typedef vector<ColorDesc> ColorDescList;
+
+typedef gfx::DepthStencilAttachment DepthStencilDesc;
+
 struct RenderPassDesc {
-    // sortFunc
-    uint phase = 0;
-    bool isTransparent = false;
+    uint index = 0;
+    ColorDescList colorAttachments;
+    DepthStencilDesc depthStencilAttachment;
+};
+typedef vector<RenderPassDesc> RenderPassDescList;
+
+struct RenderTextureDesc {
+    String name;
+    gfx::TextureType type = gfx::TextureType::TEX2D;
+    gfx::TextureUsage usage = gfx::TextureUsage::COLOR_ATTACHMENT;
+    gfx::Format format = gfx::Format::UNKNOWN;
+    int width = -1;
+    int height = -1;
+};
+typedef vector<RenderTextureDesc> RenderTextureDescList;
+
+struct FrameBufferDesc {
+    String name;
+    uint renderPass = 0;
+    vector<String> colorTextures;
+    String depthStencilTexture;
+};
+typedef vector<FrameBufferDesc> FrameBufferDescList;
+
+enum class RenderFlowType : uint8_t {
+    SCENE,
+    POSTPROCESS,
+    UI,
 };
 
 typedef vector<RenderStage *> RenderStageList;
 typedef vector<RenderFlow *> RenderFlowList;
+
+enum class RenderPassStage : uint8_t {
+    DEFAULT = 100,
+    UI = 200,
+};
 
 //TODO
 const uint CAMERA_DEFAULT_MASK = 1;

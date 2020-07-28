@@ -12,7 +12,7 @@ public:
 
     virtual bool initialize(const RenderPipelineInfo &info) override;
     virtual void destroy() override;
-    virtual bool activate(cc::Root *root) override;
+    virtual bool activate() override;
     virtual void rebuild() override;
     virtual void updateUBOs(RenderView *view) override;
     virtual void sceneCulling() override;

@@ -34,7 +34,7 @@ public:
     CC_INLINE int getPriority() const { return _priority; }
     CC_INLINE const RenderStageList &getStages() const { return _stages; }
     //    CC_INLINE const Material *getMaterial() const { return _material; }
-    //    CC_INLINE RenderFlowType getType() const { return _type; }
+    CC_INLINE RenderFlowType getType() const { return _type; }
 
 protected:
     void activateStages();
@@ -46,7 +46,7 @@ protected:
     int _priority = 0;
     RenderStageList _stages;
     //    Material *_material = nullptr;
-    //    RenderFlowType _type = ;
+    RenderFlowType _type = RenderFlowType::SCENE;
 };
 
 } // namespace pipeline
