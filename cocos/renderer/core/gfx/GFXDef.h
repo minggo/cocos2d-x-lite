@@ -43,6 +43,9 @@ enum class ObjectType : uint8_t {
     COMMAND_BUFFER,
     FENCE,
     QUEUE,
+    RENDER_QUEUE,
+    RENDER_STAGE,
+    RENDER_FLOW,
 };
 
 enum class Status : uint8_t {
@@ -643,6 +646,7 @@ struct Color {
     float a = 0.0f;
 };
 #pragma pack(pop)
+typedef vector<Color> ColorList;
 
 struct DeviceInfo {
     uintptr_t windowHandle = 0;

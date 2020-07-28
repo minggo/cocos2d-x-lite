@@ -522,6 +522,11 @@ cocos_source_files(
     cocos/renderer/pipeline/RenderView.h
     cocos/renderer/pipeline/RenderWindow.cpp
     cocos/renderer/pipeline/RenderWindow.h
+    cocos/renderer/pipeline/Pass.h
+    cocos/renderer/pipeline/Model.h
+    cocos/renderer/pipeline/SubModel.h
+    cocos/renderer/pipeline/Camera.h
+    cocos/renderer/pipeline/Material.h
     cocos/renderer/pipeline/forward/ForwardFlow.cpp
     cocos/renderer/pipeline/forward/ForwardFlow.h
     cocos/renderer/pipeline/forward/ForwardPipeline.cpp

@@ -3,12 +3,16 @@
 #include "Define.h"
 
 namespace cc {
-class Camera;
 class Root;
+
+namespace scene {
+struct Camera;
+}
 
 namespace pipeline {
 
 class RenderFlow;
+class RenderWindow;
 
 struct CC_DLL RenderViewInfo {
     //TODO
@@ -30,21 +34,22 @@ public:
     CC_INLINE uint getPriority() const { return _priority; }
     CC_INLINE uint getVisibility() const { return _visibility; }
     CC_INLINE void setVisibility(uint value) { _visibility = value; }
-    CC_INLINE cc::Camera *getCamera() const { return _camera; }
+    CC_INLINE scene::Camera *getCamera() const { return _camera; }
     CC_INLINE bool isEnabled() const { return _isEnabled; }
     CC_INLINE const RenderFlowList &getFlows() const { return _flows; }
-
+    CC_INLINE const RenderWindow *getWindow() const { return _window; }
     // getWindow
     // setWindow
 
 private:
     RenderView() = default;
-    RenderView(cc::Root *root, cc::Camera *camera);
+    RenderView(cc::Root *root, scene::Camera *camera);
 
 private:
+    RenderWindow *_window = nullptr;
     RenderFlowList _flows;
     String _name;
-    cc::Camera *_camera = nullptr;
+    scene::Camera *_camera = nullptr;
     cc::Root *_root = nullptr;
     uint _priority = 0;
     uint _visibility = CAMERA_DEFAULT_MASK;

@@ -8,14 +8,18 @@ namespace pipeline {
 class RenderPipeline;
 class RenderStage;
 class RenderView;
+class Material;
 
 struct CC_DLL RenderFlowInfo {
-    //TODO
+    String name;
+    float priority = 0;
+    Material *material = nullptr;
+    RenderFlowType type;
 };
 
 class CC_DLL RenderFlow : public Object {
 public:
-    RenderFlow() = default;
+    RenderFlow();
     virtual ~RenderFlow() = default;
 
     virtual bool initialize(const RenderFlowInfo &info);
@@ -45,7 +49,7 @@ protected:
     String _name;
     int _priority = 0;
     RenderStageList _stages;
-    //    Material *_material = nullptr;
+    Material *_material = nullptr;
     RenderFlowType _type = RenderFlowType::SCENE;
 };
 

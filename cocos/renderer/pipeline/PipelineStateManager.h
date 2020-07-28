@@ -3,7 +3,6 @@
 #include "core/CoreStd.h"
 
 namespace cc {
-struct PSOCreateInfo;
 
 namespace gfx {
 class Device;
@@ -12,12 +11,16 @@ class PipelineState;
 class RenderPass;
 };
 
+namespace scene {
+    struct PSOCreateInfo;
+}
+
 namespace pipeline {
 
 class CC_DLL PipelineStateManager {
 public:
     static gfx::PipelineState *getOrCreatePipelineStage(gfx::Device *device,
-                                                           const PSOCreateInfo &PSOInfo,
+                                                           const scene::PSOCreateInfo &PSOInfo,
                                                            gfx::RenderPass *renderPass,
                                                            gfx::InputAssembler *inputAssembler);
     

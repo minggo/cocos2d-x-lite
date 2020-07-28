@@ -9,7 +9,7 @@ class InstancedBuffer;
 
 class CC_DLL RenderInstancedQueue : public Object {
 public:
-    RenderInstancedQueue() = default;
+    RenderInstancedQueue();
     ~RenderInstancedQueue() = default;
 
     void clear();

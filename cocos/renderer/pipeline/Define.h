@@ -3,16 +3,32 @@
 #include "core/CoreStd.h"
 
 namespace cc {
-struct PSOCreateInfo;
-class SubModel;
+
+namespace scene {
+struct Model;
+struct SubModel;
+}
 
 namespace pipeline {
 
 class RenderStage;
 class RenderFlow;
 
+enum class RenderFlowType : uint8_t {
+    SCENE,
+    POSTPROCESS,
+    UI,
+};
+
+enum class CC_DLL RenderPriority : uint8_t {
+    MIN = 0,
+    MAX = 0xff,
+    DEFAULT = 0x80,
+};
+
 struct CC_DLL RenderObject {
-    //TODO
+    scene::Model *model = nullptr;
+    uint depth = 0;
 };
 typedef vector<struct RenderObject> RenderObjectList;
 
@@ -68,6 +84,7 @@ enum class RenderFlowType : uint8_t {
 
 typedef vector<RenderStage *> RenderStageList;
 typedef vector<RenderFlow *> RenderFlowList;
+typedef vector<gfx::CommandBuffer *> CommandBufferList;
 
 enum class RenderPassStage : uint8_t {
     DEFAULT = 100,
@@ -78,6 +95,22 @@ enum class RenderPassStage : uint8_t {
 const uint CAMERA_DEFAULT_MASK = 1;
 //constexpr CAMERA_DEFAULT_MASK = Layers.makeMaskExclude([Layers.BitMask.UI_2D, Layers.BitMask.GIZMOS, Layers.BitMask.EDITOR,
 //                                                           Layers.BitMask.SCENE_GIZMO, Layers.BitMask.PROFILER]);
+
+class CC_DLL PassPhase {
+public:
+    static uint getPhaseID(const String &phaseName) {
+        if(phases.find(phaseName) == phases.end()) {
+            phases[phaseName] = 1 << phaseNum++;
+        }
+        return phases[phaseName];
+    }
+    
+private:
+    static map<String, uint> phases;
+    static uint phaseNum;
+};
+map<String, uint> PassPhase::phases;
+uint PassPhase::phaseNum = 0;
 
 } // namespace pipeline
 } // namespace cc

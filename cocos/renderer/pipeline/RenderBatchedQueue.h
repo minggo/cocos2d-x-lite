@@ -9,7 +9,7 @@ class BatchedBuffer;
 
 class CC_DLL RenderBatchedQueue : public Object {
 public:
-    RenderBatchedQueue() = default;
+    RenderBatchedQueue();
     ~RenderBatchedQueue() = default;
 
     void clear();

@@ -16,6 +16,11 @@ class Buffer;
 class RenderPass;
 } // namespace gfx
 
+namespace scene {
+struct Camera;
+struct Model;
+}
+
 namespace pipeline {
 
 class RenderView;
@@ -53,7 +58,7 @@ public:
     void clearRenderPasses();
     void destroyFlows();
     RenderFlow *getFlow(const String &name) const;
-    gfx::Buffer *getFrameBuffer(const String &name) const;
+    gfx::Framebuffer *getFramebuffer(const String &name) const;
     gfx::RenderPass *getRenderPass(uint stage) const;
     gfx::Texture *getRenderTexture(const String &name) const;
     gfx::Texture *getTexture(const String &name) const;
@@ -73,6 +78,7 @@ public:
     CC_INLINE const RenderObjectList &getRenderObjects() const { return _renderObjects; }
     CC_INLINE float getShadingScale() const { return _shadingScale; }
     CC_INLINE gfx::InputAssembler *getQuadIA() const { return _quadIA; }
+    CC_INLINE const CommandBufferList &getCommandBuffers() const { return _commandBuffers; }
     
     CC_INLINE const String &getName() const { return _name; }
     CC_INLINE bool isHDRSupported() const { return _isHDRSupported; }
@@ -92,7 +98,7 @@ protected:
     void destroyQuadInputAssembler();
     bool createUBOs();
     void destroyUBOs();
-    void addVisibleModel(cc::Model *model, cc::Camera *camera);
+    void addVisibleModel(scene::Model *model, scene::Camera *camera);
 
 private:
     void activateFlow(RenderFlow *flow);

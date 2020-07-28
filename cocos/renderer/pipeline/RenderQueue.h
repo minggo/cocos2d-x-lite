@@ -10,7 +10,7 @@ public:
     RenderQueue(const RenderPassDesc &desc);
     
     void clear();
-    bool insertRenderPass(RenderObject *renderObj, uint subModelIdx, uint passIdx);
+    bool insertRenderPass(const RenderObject &renderObj, uint subModelIdx, uint passIdx);
     void recordCommandBuffer(gfx::Device *device, gfx::RenderPass *renderPass, gfx::CommandBuffer *cmdBuff);
     void sort();
     

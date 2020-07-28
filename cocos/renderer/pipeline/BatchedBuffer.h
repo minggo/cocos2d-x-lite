@@ -3,8 +3,12 @@
 #include "Define.h"
 
 namespace cc {
-class Pass;
-class SubModel;
+
+namespace scene {
+struct Pass;
+struct SubModel;
+struct PSOCreateInfo;
+}
 
 namespace pipeline {
 
@@ -16,27 +20,27 @@ struct CC_DLL BatchedItem {
     uint mergCount = 0;
     gfx::InputAssembler *ia = nullptr;
     gfx::Buffer *ubo = nullptr;
-    cc::PSOCreateInfo *psoCreatedInfo = nullptr;
+    scene::PSOCreateInfo *psoCreatedInfo = nullptr;
 };
 typedef vector<BatchedItem> BatchedItemList;
 
 class CC_DLL BatchedBuffer : public Object {
 public:
-    BatchedBuffer(cc::Pass *pass);
+    BatchedBuffer(scene::Pass *pass);
     ~BatchedBuffer() = default;
 
     void destroy();
-    void merge(cc::SubModel *, uint passIdx, RenderObject *);
+    void merge(scene::SubModel *, uint passIdx, RenderObject *);
     void clear();
     void clearUBO();
 
     CC_INLINE const BatchedItemList &getBaches() const { return _batchedItems; }
-    CC_INLINE cc::Pass *getPass() const { return _pass; }
+    CC_INLINE scene::Pass *getPass() const { return _pass; }
 
 private:
     //    const _localBatched = new UBOLocalBatched();
     BatchedItemList _batchedItems;
-    cc::Pass *_pass = nullptr;
+    scene::Pass *_pass = nullptr;
 };
 
 } // namespace pipeline

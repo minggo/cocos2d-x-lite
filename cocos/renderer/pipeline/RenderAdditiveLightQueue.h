@@ -3,21 +3,24 @@
 #include "core/CoreStd.h"
 
 namespace cc {
-class SubModel;
-struct PSOCreateInfo;
 class Light;
 class RenderObject;
-class Pass;
 struct MacroPatch;
+
+namespace scene {
+struct SubModel;
+struct Pass;
+struct PSOCreateInfo;
+}
 
 namespace pipeline {
 
 class RenderAdditiveLightQueue : public Object {
 public:
-    RenderAdditiveLightQueue() = default;
+    RenderAdditiveLightQueue();
     ~RenderAdditiveLightQueue() = default;
     
-    void add(RenderObject *renderObj, uint subModelIdx, Pass *pass, uint beginIdx, uint endIdx);
+    void add(RenderObject *renderObj, uint subModelIdx, scene::Pass *pass, uint beginIdx, uint endIdx);
     void clear(const vector<Light *> &validLights,
                const vector<gfx::Buffer *> &lightBuffers,
                const vector<uint> &lightIndices);
@@ -25,11 +28,11 @@ public:
     
 private:
     void attach(RenderObject *renderObj, uint subModelIdx, gfx::Buffer *lightBuffer,
-                uint lightIdx, Pass *pass, vector<MacroPatch> patches);
+                uint lightIdx, scene::Pass *pass, vector<MacroPatch> patches);
 
 private:
-    vector<vector<SubModel *>> _sortedSubModelsArray;
-    vector<vector<PSOCreateInfo>> _sortedPSOCIArray;
+    vector<vector<scene::SubModel *>> _sortedSubModelsArray;
+    vector<vector<scene::PSOCreateInfo>> _sortedPSOCIArray;
     vector<Light *> _validLights;
     vector<gfx::Buffer *> _lightBuffers;
     vector<uint> _lightIndices;

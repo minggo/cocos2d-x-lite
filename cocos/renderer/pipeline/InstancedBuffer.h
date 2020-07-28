@@ -3,10 +3,14 @@
 #include "Define.h"
 
 namespace cc {
-class Pass;
 struct InstancedAttributeBlock;
+
+
+namespace scene {
+struct Pass;
 struct PSOCreateInfo;
-class SubModel;
+struct SubModel;
+}
 
 namespace pipeline {
 
@@ -25,22 +29,22 @@ public:
     static const uint INITIAL_CAPACITY = 32;
     static const uint MAX_CAPACITY = 1024;
 
-    InstancedBuffer(cc::Pass *pass);
+    InstancedBuffer(scene::Pass *pass);
     ~InstancedBuffer() = default;
 
     void destroy();
-    void merge(cc::SubModel *, const cc::InstancedAttributeBlock &, const cc::PSOCreateInfo &);
+    void merge(scene::SubModel *, const cc::InstancedAttributeBlock &, const scene::PSOCreateInfo &);
     void uploadBuffers();
     void clear();
 
     CC_INLINE const InstancedItemList &getInstances() const { return _instancedItems; }
     //    CC_INLINE const cc::PSOCreateInfo &getPSOCreateInfo() const { return _PSOCreateInfo; }
-    CC_INLINE cc::Pass *getPass() const { return _pass; }
+    CC_INLINE scene::Pass *getPass() const { return _pass; }
 
 private:
     InstancedItemList _instancedItems;
     //    cc::PSOCreateInfo _PSOCreateInfo;
-    cc::Pass *_pass = nullptr;
+    scene::Pass *_pass = nullptr;
 };
 
 } // namespace pipeline
