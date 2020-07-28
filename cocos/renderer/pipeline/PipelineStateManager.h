@@ -11,16 +11,14 @@ class PipelineState;
 class RenderPass;
 };
 
-namespace scene {
-    struct PSOCreateInfo;
-}
-
 namespace pipeline {
+
+struct PSOCreateInfo;
 
 class CC_DLL PipelineStateManager {
 public:
     static gfx::PipelineState *getOrCreatePipelineStage(gfx::Device *device,
-                                                           const scene::PSOCreateInfo &PSOInfo,
+                                                           const PSOCreateInfo &PSOInfo,
                                                            gfx::RenderPass *renderPass,
                                                            gfx::InputAssembler *inputAssembler);
     

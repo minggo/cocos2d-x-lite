@@ -522,11 +522,16 @@ cocos_source_files(
     cocos/renderer/pipeline/RenderView.h
     cocos/renderer/pipeline/RenderWindow.cpp
     cocos/renderer/pipeline/RenderWindow.h
-    cocos/renderer/pipeline/Pass.h
-    cocos/renderer/pipeline/Model.h
-    cocos/renderer/pipeline/SubModel.h
-    cocos/renderer/pipeline/Camera.h
-    cocos/renderer/pipeline/Material.h
+    cocos/renderer/pipeline/helper/Pass.h
+    cocos/renderer/pipeline/helper/Pass.cpp
+    cocos/renderer/pipeline/helper/Model.h
+    cocos/renderer/pipeline/helper/Model.cpp
+    cocos/renderer/pipeline/helper/SubModel.h
+    cocos/renderer/pipeline/helper/SubModel.cpp
+    cocos/renderer/pipeline/helper/Camera.h
+    cocos/renderer/pipeline/helper/Camera.cpp
+    cocos/renderer/pipeline/helper/Material.h
+    cocos/renderer/pipeline/helper/Material.cpp
     cocos/renderer/pipeline/forward/ForwardFlow.cpp
     cocos/renderer/pipeline/forward/ForwardFlow.h
     cocos/renderer/pipeline/forward/ForwardPipeline.cpp

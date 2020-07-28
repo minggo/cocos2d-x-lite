@@ -2,7 +2,7 @@
 #include "core/CoreStd.h"
 
 namespace cc {
-namespace scene {
+namespace pipeline {
 
 struct SubModel;
 
@@ -12,5 +12,5 @@ public:
     
 };
 
-} //namespace renderer
+} //namespace pipeline
 } //namespace cc

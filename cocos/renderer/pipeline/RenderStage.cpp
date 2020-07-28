@@ -2,10 +2,10 @@
 #include "RenderFlow.h"
 #include "RenderQueue.h"
 #include "RenderPipeline.h"
-#include "Model.h"
-#include "SubModel.h"
+#include "helper/Model.h"
+#include "helper/SubModel.h"
 #include "RenderView.h"
-#include "Camera.h"
+#include "helper/Camera.h"
 #include "RenderWindow.h"
 #include "gfx/GFXFramebuffer.h"
 #include "gfx/GFXCommandBuffer.h"
@@ -21,9 +21,6 @@ size_t opaqueCompareFn(const RenderPass &a, const RenderPass &b) {
 size_t transparentCompareFn(const RenderPass& a, const RenderPass& b) {
     return (a.hash - b.hash) || (b.depth - a.depth) || (a.shaderID - b.shaderID);
 }
-}
-
-RenderStage::RenderStage() : GFXObject(gfx::ObjectType::RENDER_STAGE) {
 }
 
 bool RenderStage::initialize(const RenderStageInfo &info) {
@@ -62,8 +59,8 @@ void RenderStage::activate(RenderFlow *flow) {
             default:
                 break;
         }
-        RenderPassDesc renderPassDescriptor = {renderQueueDescriptor.isTransparent, phases, sortFunc};
-        _renderQueues.emplace_back(CC_NEW(RenderQueue(std::move(renderPassDescriptor))));
+        RenderQueueDesc renderQueueDesc = {renderQueueDescriptor.isTransparent, phases, sortFunc};
+        _renderQueues.emplace_back(CC_NEW(RenderQueue(std::move(renderQueueDesc))));
     }
     
     if(_framebufferName == "window") {

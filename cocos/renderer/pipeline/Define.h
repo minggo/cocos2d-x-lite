@@ -3,22 +3,12 @@
 #include "core/CoreStd.h"
 
 namespace cc {
-
-namespace scene {
-struct Model;
-struct SubModel;
-}
-
 namespace pipeline {
 
+struct Model;
+struct SubModel;
 class RenderStage;
 class RenderFlow;
-
-enum class RenderFlowType : uint8_t {
-    SCENE,
-    POSTPROCESS,
-    UI,
-};
 
 enum class CC_DLL RenderPriority : uint8_t {
     MIN = 0,
@@ -27,7 +17,7 @@ enum class CC_DLL RenderPriority : uint8_t {
 };
 
 struct CC_DLL RenderObject {
-    scene::Model *model = nullptr;
+    Model *model = nullptr;
     uint depth = 0;
 };
 typedef vector<struct RenderObject> RenderObjectList;
@@ -48,17 +38,15 @@ typedef vector<RenderPass> RenderPassList;
 
 typedef gfx::ColorAttachment ColorDesc;
 typedef vector<ColorDesc> ColorDescList;
-
 typedef gfx::DepthStencilAttachment DepthStencilDesc;
-
-struct RenderPassDesc {
+struct CC_DLL RenderPassDesc {
     uint index = 0;
     ColorDescList colorAttachments;
     DepthStencilDesc depthStencilAttachment;
 };
 typedef vector<RenderPassDesc> RenderPassDescList;
 
-struct RenderTextureDesc {
+struct CC_DLL RenderTextureDesc {
     String name;
     gfx::TextureType type = gfx::TextureType::TEX2D;
     gfx::TextureUsage usage = gfx::TextureUsage::COLOR_ATTACHMENT;
@@ -68,7 +56,7 @@ struct RenderTextureDesc {
 };
 typedef vector<RenderTextureDesc> RenderTextureDescList;
 
-struct FrameBufferDesc {
+struct CC_DLL FrameBufferDesc {
     String name;
     uint renderPass = 0;
     vector<String> colorTextures;
@@ -76,7 +64,7 @@ struct FrameBufferDesc {
 };
 typedef vector<FrameBufferDesc> FrameBufferDescList;
 
-enum class RenderFlowType : uint8_t {
+enum class CC_DLL RenderFlowType : uint8_t {
     SCENE,
     POSTPROCESS,
     UI,
@@ -86,15 +74,21 @@ typedef vector<RenderStage *> RenderStageList;
 typedef vector<RenderFlow *> RenderFlowList;
 typedef vector<gfx::CommandBuffer *> CommandBufferList;
 
-enum class RenderPassStage : uint8_t {
+enum class CC_DLL RenderPassStage : uint8_t {
     DEFAULT = 100,
     UI = 200,
 };
 
 //TODO
-const uint CAMERA_DEFAULT_MASK = 1;
+const uint CC_DLL CAMERA_DEFAULT_MASK = 1;
 //constexpr CAMERA_DEFAULT_MASK = Layers.makeMaskExclude([Layers.BitMask.UI_2D, Layers.BitMask.GIZMOS, Layers.BitMask.EDITOR,
 //                                                           Layers.BitMask.SCENE_GIZMO, Layers.BitMask.PROFILER]);
+
+struct CC_DLL RenderQueueDesc {
+    bool isTransparent = false;
+    uint phases = 0;
+    std::function<size_t(const RenderPass &a, const RenderPass &b)> sortFunc;
+};
 
 class CC_DLL PassPhase {
 public:

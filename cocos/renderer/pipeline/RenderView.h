@@ -5,12 +5,8 @@
 namespace cc {
 class Root;
 
-namespace scene {
-struct Camera;
-}
-
 namespace pipeline {
-
+struct Camera;
 class RenderFlow;
 class RenderWindow;
 
@@ -34,7 +30,7 @@ public:
     CC_INLINE uint getPriority() const { return _priority; }
     CC_INLINE uint getVisibility() const { return _visibility; }
     CC_INLINE void setVisibility(uint value) { _visibility = value; }
-    CC_INLINE scene::Camera *getCamera() const { return _camera; }
+    CC_INLINE Camera *getCamera() const { return _camera; }
     CC_INLINE bool isEnabled() const { return _isEnabled; }
     CC_INLINE const RenderFlowList &getFlows() const { return _flows; }
     CC_INLINE const RenderWindow *getWindow() const { return _window; }
@@ -43,13 +39,13 @@ public:
 
 private:
     RenderView() = default;
-    RenderView(cc::Root *root, scene::Camera *camera);
+    RenderView(cc::Root *root, Camera *camera);
 
 private:
     RenderWindow *_window = nullptr;
     RenderFlowList _flows;
     String _name;
-    scene::Camera *_camera = nullptr;
+    Camera *_camera = nullptr;
     cc::Root *_root = nullptr;
     uint _priority = 0;
     uint _visibility = CAMERA_DEFAULT_MASK;

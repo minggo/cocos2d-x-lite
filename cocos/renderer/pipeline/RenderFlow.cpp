@@ -4,9 +4,6 @@
 namespace cc {
 namespace pipeline {
 
-RenderFlow::RenderFlow() : GFXObject(gfx::ObjectType::RENDER_FLOW) {
-}
-
 bool RenderFlow::initialize(const RenderFlowInfo &info) {
     _name = info.name;
     _priority = info.priority;

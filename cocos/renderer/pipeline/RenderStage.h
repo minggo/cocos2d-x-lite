@@ -20,18 +20,18 @@ enum class RenderQueueSortMode : uint8_t {
     BACK_TO_FRONT
 };
 
-struct CC_DLL RenderQueueDesc {
+struct CC_DLL RenderQueueDescriptor {
     bool isTransparent = false;
     RenderQueueSortMode sortMode = RenderQueueSortMode::FRONT_TO_BACK;
     vector<String> stages;
 };
-typedef vector<RenderQueueDesc> RenderQueueDescList;
+typedef vector<RenderQueueDescriptor> RenderQueueDescptorList;
 
 struct CC_DLL RenderStageInfo {
     String name;
-    int priority = 0;
+    uint priority = 0;
+    RenderQueueDescptorList renderQueues;
     String framebuffer;
-    RenderQueueDescList renderQueues;
 };
 
 class CC_DLL RenderStage : public Object {
@@ -70,7 +70,7 @@ protected:
     String _framebufferName;
     vector<gfx::Color> _clearColors;
     gfx::Rect _renderArea;
-    RenderQueueDescList _renderQueueDescriptors;
+    RenderQueueDescptorList _renderQueueDescriptors;
     vector<RenderQueue *> _renderQueues;
     float _clearDepth = 1.0f;
     uint _clearStencil = 0;

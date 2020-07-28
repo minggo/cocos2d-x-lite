@@ -6,7 +6,7 @@
 namespace cc {
 class Light;
 class Model;
-class Camera;
+
 
 namespace gfx {
 class Device;
@@ -16,13 +16,12 @@ class Buffer;
 class RenderPass;
 } // namespace gfx
 
-namespace scene {
-struct Camera;
-struct Model;
-}
-
 namespace pipeline {
 
+
+struct Camera;
+struct Model;
+struct Camera;
 class RenderView;
 
 struct CC_DLL RenderPipelineInfo {
@@ -98,7 +97,7 @@ protected:
     void destroyQuadInputAssembler();
     bool createUBOs();
     void destroyUBOs();
-    void addVisibleModel(scene::Model *model, scene::Camera *camera);
+    void addVisibleModel(Model *model, Camera *camera);
 
 private:
     void activateFlow(RenderFlow *flow);

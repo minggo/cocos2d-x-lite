@@ -23,7 +23,7 @@ public:
     CC_INLINE gfx::Buffer *getLightsUBO() { return _lightsUBO; }
 
 private:
-    void cullLightPerModel(scene::Model *model);
+    void cullLightPerModel(Model *model);
 
 private:
     gfx::Buffer *_lightsUBO = nullptr;

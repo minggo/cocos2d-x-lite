@@ -3,14 +3,14 @@
 #include "gfx/GFXShader.h"
 #include "gfx/GFXCommandBuffer.h"
 #include "PipelineStateManager.h"
-#include "Model.h"
-#include "SubModel.h"
-#include "Pass.h"
+#include "helper/Model.h"
+#include "helper/SubModel.h"
+#include "helper/Pass.h"
 
 namespace cc {
 namespace pipeline {
 
-RenderQueue::RenderQueue(const RenderPassDesc &desc):GFXObject(gfx::ObjectType::RENDER_QUEUE) {
+RenderQueue::RenderQueue(const RenderQueueDesc &desc) {
     _passDesc = desc;
     _queue.resize(64);
 }
@@ -20,21 +20,21 @@ void RenderQueue::clear() {
 }
 
 bool RenderQueue::insertRenderPass(const RenderObject &renderObj, uint subModelIdx, uint passIdx) {
-    const auto *subModel = renderObj.model->subModels[subModelIdx];
+    auto *subModel = renderObj.model->subModels[subModelIdx];
     const auto *pass = subModel->passes[passIdx];
     const auto &psoInfo = subModel->psoInfos[passIdx];
     const auto isTransparent = psoInfo.blendState.targets[0].blend;
-    
+
     if (isTransparent != _passDesc.isTransparent || !(pass->phase & _passDesc.phases)) {
         return false;
     }
-    
+
     const auto hash = (0 << 30) | static_cast<uint>(pass->priority) << 16 | static_cast<uint>(subModel->priority) << 8 | passIdx;
     RenderPass renderPass;
     renderPass.hash = hash;
     renderPass.depth = renderObj.depth;
     renderPass.shaderID = psoInfo.shader->getHash();
-    renderPass.passIdx = passIdx;
+    renderPass.index = passIdx;
     renderPass.subModel = subModel;
 
     _queue.emplace_back(std::move(renderPass));
@@ -48,7 +48,7 @@ void RenderQueue::sort() {
 void RenderQueue::recordCommandBuffer(gfx::Device *device, gfx::RenderPass *renderPass, gfx::CommandBuffer *cmdBuff) {
     for (size_t i = 0; i < _queue.size(); ++i) {
         const auto *subModel = _queue[i].subModel;
-        const auto passIdx = _queue[i].passIdx;
+        const auto passIdx = _queue[i].index;
         auto *ia = subModel->inputAssembler;
         const auto &psoInfo = subModel->psoInfos[passIdx];
         auto *pso = PipelineStateManager::getOrCreatePipelineStage(device, psoInfo, renderPass, ia);

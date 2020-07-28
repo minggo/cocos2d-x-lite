@@ -3,13 +3,13 @@
 #include "gfx/GFXRenderPass.h"
 #include "gfx/GFXInputAssembler.h"
 #include "gfx/GFXDevice.h"
-#include "SubModel.h"
+#include "helper/SubModel.h"
 
 namespace cc {
 namespace pipeline {
 map<uint, gfx::PipelineState *> PipelineStateManager::_PSOHashMap;
 gfx::PipelineState* PipelineStateManager::getOrCreatePipelineStage(gfx::Device *device,
-                                                                   const scene::PSOCreateInfo &PSOInfo,
+                                                                   const PSOCreateInfo &PSOInfo,
                                                                    gfx::RenderPass *renderPass,
                                                                    gfx::InputAssembler *inputAssembler) {
     const auto psoInfoHash = PSOInfo.hash;

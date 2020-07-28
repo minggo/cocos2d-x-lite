@@ -43,9 +43,6 @@ enum class ObjectType : uint8_t {
     COMMAND_BUFFER,
     FENCE,
     QUEUE,
-    RENDER_QUEUE,
-    RENDER_STAGE,
-    RENDER_FLOW,
 };
 
 enum class Status : uint8_t {

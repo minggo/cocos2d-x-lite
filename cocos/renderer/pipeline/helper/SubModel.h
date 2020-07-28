@@ -1,7 +1,8 @@
 #pragma once
+#include "../Define.h"
 
 namespace cc {
-namespace scene {
+namespace pipeline {
 
 struct Pass;
 struct RnederPriority;
@@ -23,10 +24,10 @@ struct CC_DLL SubModel {
 public:
     vector<Pass *> passes;
     PSOCreateInfoList psoInfos;
-    pipeline::RenderPriority priority = pipeline::RenderPriority::DEFAULT;
+    RenderPriority priority = RenderPriority::DEFAULT;
     gfx::InputAssembler *inputAssembler = nullptr;
 };
 typedef vector<SubModel *> SubModelList;
 
-} //namespace renderer
+} //namespace pipeline
 } //namespace cc
