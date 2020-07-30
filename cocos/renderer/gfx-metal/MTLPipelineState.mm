@@ -67,10 +67,10 @@ bool CCMTLPipelineState::createGPUPipelineState() {
 
     _GPUPipelieState->mtlDepthStencilState = _mtlDepthStencilState;
     _GPUPipelieState->mtlRenderPipelineState = _mtlRenderPipelineState;
-    _GPUPipelieState->cullMode = mu::toMTLCullMode(_rasterizerState.cullMode());
-    _GPUPipelieState->fillMode = mu::toMTLTriangleFillMode(_rasterizerState.polygonMode());
-    _GPUPipelieState->depthClipMode = mu::toMTLDepthClipMode(_rasterizerState.isDepthClip());
-    _GPUPipelieState->winding = mu::toMTLWinding(_rasterizerState.isFrontFaceCCW());
+    _GPUPipelieState->cullMode = mu::toMTLCullMode(_rasterizerState.cullMode);
+    _GPUPipelieState->fillMode = mu::toMTLTriangleFillMode(_rasterizerState.polygonMode);
+    _GPUPipelieState->depthClipMode = mu::toMTLDepthClipMode(_rasterizerState.isDepthClip);
+    _GPUPipelieState->winding = mu::toMTLWinding(_rasterizerState.isFrontFaceCCW);
     _GPUPipelieState->stencilRefFront = _depthStencilState.stencilRefFront;
     _GPUPipelieState->stencilRefBack = _depthStencilState.stencilRefBack;
     _GPUPipelieState->primitiveType = mu::toMTLPrimitiveType(_primitive);
@@ -87,31 +87,31 @@ bool CCMTLPipelineState::createMTLDepthStencilState() {
         return false;
     }
 
-    descriptor.depthWriteEnabled = _depthStencilState.depthWrite();
+    descriptor.depthWriteEnabled = _depthStencilState.depthWrite;
 
-    if (!_depthStencilState.depthTest())
+    if (!_depthStencilState.depthTest)
         descriptor.depthCompareFunction = MTLCompareFunctionAlways;
     else
-        descriptor.depthCompareFunction = mu::toMTLCompareFunction(_depthStencilState.depthFunc());
+        descriptor.depthCompareFunction = mu::toMTLCompareFunction(_depthStencilState.depthFunc);
 
-    if (_depthStencilState.stencilTestFront()) {
-        descriptor.frontFaceStencil.stencilCompareFunction = mu::toMTLCompareFunction(_depthStencilState.stencilFuncFront());
+    if (_depthStencilState.stencilTestFront) {
+        descriptor.frontFaceStencil.stencilCompareFunction = mu::toMTLCompareFunction(_depthStencilState.stencilFuncFront);
         descriptor.frontFaceStencil.readMask = _depthStencilState.stencilReadMaskFront;
         descriptor.frontFaceStencil.writeMask = _depthStencilState.stencilWriteMaskFront;
-        descriptor.frontFaceStencil.stencilFailureOperation = mu::toMTLStencilOperation(_depthStencilState.stencilFailOpFront());
-        descriptor.frontFaceStencil.depthFailureOperation = mu::toMTLStencilOperation(_depthStencilState.stencilZFailOpFront());
-        descriptor.frontFaceStencil.depthStencilPassOperation = mu::toMTLStencilOperation(_depthStencilState.stencilPassOpFront());
+        descriptor.frontFaceStencil.stencilFailureOperation = mu::toMTLStencilOperation(_depthStencilState.stencilFailOpFront);
+        descriptor.frontFaceStencil.depthFailureOperation = mu::toMTLStencilOperation(_depthStencilState.stencilZFailOpFront);
+        descriptor.frontFaceStencil.depthStencilPassOperation = mu::toMTLStencilOperation(_depthStencilState.stencilPassOpFront);
     } else {
         descriptor.frontFaceStencil = nil;
     }
 
-    if (_depthStencilState.stencilTestBack()) {
-        descriptor.backFaceStencil.stencilCompareFunction = mu::toMTLCompareFunction(_depthStencilState.stencilFuncBack());
+    if (_depthStencilState.stencilTestBack) {
+        descriptor.backFaceStencil.stencilCompareFunction = mu::toMTLCompareFunction(_depthStencilState.stencilFuncBack);
         descriptor.backFaceStencil.readMask = _depthStencilState.stencilReadMaskBack;
         descriptor.backFaceStencil.writeMask = _depthStencilState.stencilWriteMaskBack;
-        descriptor.backFaceStencil.stencilFailureOperation = mu::toMTLStencilOperation(_depthStencilState.stencilFailOpBack());
-        descriptor.backFaceStencil.depthFailureOperation = mu::toMTLStencilOperation(_depthStencilState.stencilZFailOpBack());
-        descriptor.backFaceStencil.depthStencilPassOperation = mu::toMTLStencilOperation(_depthStencilState.stencilPassOpBack());
+        descriptor.backFaceStencil.stencilFailureOperation = mu::toMTLStencilOperation(_depthStencilState.stencilFailOpBack);
+        descriptor.backFaceStencil.depthFailureOperation = mu::toMTLStencilOperation(_depthStencilState.stencilZFailOpBack);
+        descriptor.backFaceStencil.depthStencilPassOperation = mu::toMTLStencilOperation(_depthStencilState.stencilPassOpBack);
     } else {
         descriptor.backFaceStencil = nil;
     }
@@ -216,23 +216,23 @@ void CCMTLPipelineState::setBlendStates(MTLRenderPipelineDescriptor *descriptor)
     //    BlendState::isIndepend
     //    BlendState::blendColor;
 
-    descriptor.alphaToCoverageEnabled = _blendState.isA2C();
+    descriptor.alphaToCoverageEnabled = _blendState.isA2C;
 
     int i = 0;
     const auto& targets = pipeline::BlendTargetPool::getBlendTarget(_blendState.targetIndex, _blendState.targetCount);
     for (const auto &blendTarget : targets) {
         MTLRenderPipelineColorAttachmentDescriptor *colorDescriptor = descriptor.colorAttachments[i];
-        colorDescriptor.blendingEnabled = blendTarget.blend();
-        if (!blendTarget.blend())
+        colorDescriptor.blendingEnabled = blendTarget.blend;
+        if (!blendTarget.blend)
             continue;
 
-        colorDescriptor.writeMask = mu::toMTLColorWriteMask(blendTarget.blendColorMask());
-        colorDescriptor.sourceRGBBlendFactor = mu::toMTLBlendFactor(blendTarget.blendSrc());
-        colorDescriptor.destinationRGBBlendFactor = mu::toMTLBlendFactor(blendTarget.blendDst());
-        colorDescriptor.rgbBlendOperation = mu::toMTLBlendOperation(blendTarget.blendEq());
-        colorDescriptor.sourceAlphaBlendFactor = mu::toMTLBlendFactor(blendTarget.blendSrcAlpha());
-        colorDescriptor.destinationAlphaBlendFactor = mu::toMTLBlendFactor(blendTarget.blendDstAlpha());
-        colorDescriptor.alphaBlendOperation = mu::toMTLBlendOperation(blendTarget.blendAlphaEq());
+        colorDescriptor.writeMask = mu::toMTLColorWriteMask(blendTarget.blendColorMask);
+        colorDescriptor.sourceRGBBlendFactor = mu::toMTLBlendFactor(blendTarget.blendSrc);
+        colorDescriptor.destinationRGBBlendFactor = mu::toMTLBlendFactor(blendTarget.blendDst);
+        colorDescriptor.rgbBlendOperation = mu::toMTLBlendOperation(blendTarget.blendEq);
+        colorDescriptor.sourceAlphaBlendFactor = mu::toMTLBlendFactor(blendTarget.blendSrcAlpha);
+        colorDescriptor.destinationAlphaBlendFactor = mu::toMTLBlendFactor(blendTarget.blendDstAlpha);
+        colorDescriptor.alphaBlendOperation = mu::toMTLBlendOperation(blendTarget.blendAlphaEq);
 
         ++i;
     }

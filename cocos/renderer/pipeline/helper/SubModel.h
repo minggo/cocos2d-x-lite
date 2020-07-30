@@ -21,9 +21,11 @@ struct CC_DLL PSOInfo {
 
 struct CC_DLL SubModel {
     uint passesIndex = 0; //vector<Pass *>
+    uint passesCount = 0;
     uint psoInfosIndex = 0; //PSOCreateInfoList
     uint priority = (uint)RenderPriority::DEFAULT; //RenderPriority
     uint inputAssemblerIndex = 0; //gfx::InputAssembler *
+    uint subMeshIndex = 0;
 };
 
 } //namespace pipeline

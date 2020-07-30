@@ -6,19 +6,21 @@
 #include "helper/SubModel.h"
 #include "RenderView.h"
 #include "helper/Camera.h"
+#include "helper/Pool.h"
 #include "RenderWindow.h"
 #include "gfx/GFXFramebuffer.h"
 #include "gfx/GFXCommandBuffer.h"
+
 
 namespace cc {
 namespace pipeline {
 
 namespace {
-size_t opaqueCompareFn(const RenderPass &a, const RenderPass &b) {
+int opaqueCompareFn(const RenderPass &a, const RenderPass &b) {
     return (a.hash - b.hash) || (a.depth - b.depth) || (a.shaderID - b.shaderID);
 }
 
-size_t transparentCompareFn(const RenderPass& a, const RenderPass& b) {
+int transparentCompareFn(const RenderPass& a, const RenderPass& b) {
     return (a.hash - b.hash) || (b.depth - a.depth) || (a.shaderID - b.shaderID);
 }
 }
@@ -138,8 +140,11 @@ void RenderStage::sortRenderQueue() {
     
     const auto &renderObjects = _pipeline->getRenderObjects();
     for(const auto &renderObject : renderObjects) {
-        for(size_t i = 0; i < renderObject.model->subModels.size(); i++) {
-            for(size_t j = 0; j < renderObject.model->subModels[i]->passes.size(); j ++) {
+        const auto *model = ModelPool::getModel(renderObject.modelIndex);
+        const auto *subModel = SubModelPool::getSubModel(model->subModelsIndex);
+        for(size_t i = 0; i < ModelPool::getModel(renderObject.modelIndex)->subModelsCount; i++) {
+            const auto *pass = PassPool::getPass((subModel+i)->passesIndex);
+            for(size_t j = 0; j < (subModel+i)->passesCount; j ++) {
                 for (auto &renderQueue : _renderQueues) {
                     renderQueue->insertRenderPass(renderObject, i, j);
                 }

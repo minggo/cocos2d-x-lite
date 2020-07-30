@@ -41,8 +41,8 @@ public:
 
     virtual void destroy() = 0;
     virtual vector<cc::Light *> &getValidLights() const = 0;
-    virtual vector<float> &getLightIndexOffsets() const = 0;
-    virtual vector<float> &getLightIndices() const = 0;
+    virtual vector<uint> &getLightIndexOffsets() const = 0;
+    virtual vector<uint> &getLightIndices() const = 0;
     virtual vector<gfx::Buffer *> &getLightBuffers() const = 0;
 
     virtual bool activate();

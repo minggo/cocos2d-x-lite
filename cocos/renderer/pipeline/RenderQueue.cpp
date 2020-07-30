@@ -26,7 +26,7 @@ bool RenderQueue::insertRenderPass(const RenderObject &renderObj, uint subModelI
     const auto *pass = PassPool::getPass(subModel->passesIndex) + passIdx;
     const auto *psoInfo = PSOInfoPool::getPSOInfo(subModel->psoInfosIndex) + passIdx;
     const auto &blendTargets = BlendTargetPool::getBlendTarget(psoInfo->bs.targetIndex, psoInfo->bs.targetCount);
-    const auto isTransparent = blendTargets[0].blend();
+    const auto isTransparent = blendTargets[0].blend;
 
     if (isTransparent != _passDesc.isTransparent || !(pass->phase & _passDesc.phases)) {
         return false;
@@ -56,7 +56,7 @@ void RenderQueue::recordCommandBuffer(gfx::Device *device, gfx::RenderPass *rend
         const auto *psoInfo = PSOInfoPool::getPSOInfo(subModel->psoInfosIndex) + passIdx;
         auto *pso = PipelineStateManager::getOrCreatePipelineStage(device, psoInfo, renderPass, ia);
         cmdBuff->bindPipelineState(pso);
-        cmdBuff->bindBindingLayout(psoInfo.bindingLayout);
+        cmdBuff->bindBindingLayout(BindingLayoutPool::getBindingLayout(psoInfo->bindingLayoutIndex));
         cmdBuff->bindInputAssembler(ia);
         cmdBuff->draw(ia);
     }

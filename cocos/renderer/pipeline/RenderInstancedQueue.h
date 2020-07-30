@@ -15,7 +15,7 @@ public:
     void clear();
     void recordCommandBuffer(gfx::Device *, gfx::RenderPass *, gfx::CommandBuffer *);
 
-    CC_INLINE const set<InstancedBuffer *> &getQueue() const { return _queue; }
+    CC_INLINE set<InstancedBuffer *> &getQueue() { return _queue; }
 
 private:
     set<InstancedBuffer *> _queue;

@@ -887,122 +887,66 @@ struct InputState {
 };
 
 struct RasterizerState {
-    /*
-        BYTE3       BYTE2       BYTE1       BIT3            BIT2        BIT1                BIT0
-        cullMode    shadeModel  polygonMode isMultisample   isDepthClip depthBiasEnabled    isFrontFaceCCW
-     */
-    uint data1 = (0xFF000000 & ((uint8_t)CullMode::BACK<<24)) |
-                 (0x00FF0000 & ((uint8_t)ShadeModel::GOURAND<<16)) |
-                 (0x0000FF00 & ((uint8_t)PolygonMode::FILL)) | 
-                 ((false << 3) | (true << 2) | (false << 1) | (true));
-                 
-    bool isFrontFaceCCW() const { return (data1 & 0x1);}
-    bool depthBiasEnabled() const { return (data1 & 0x2);}
-    bool isDepthClip() const { return (data1 & 0x4);}
-    bool isMultisample() const { return (data1 & 0x8);}
-    PolygonMode polygonMode() const { return PolygonMode((data1 & 0xFF00) >> 8);}
-    ShadeModel shadeModel() const { return ShadeModel((data1 & 0xFF0000) >> 16);}
-    CullMode cullMode() const { return CullMode((data1 & 0xFF000000) >> 24);}
-
-    uint isDiscard = 0;
+    bool isDiscard = false;
+    PolygonMode polygonMode = PolygonMode::FILL;
+    ShadeModel shadeModel = ShadeModel::GOURAND;
+    CullMode cullMode = CullMode::BACK;
+    bool isFrontFaceCCW = true;
+    bool depthBiasEnabled = false;
     float depthBias = 0.0f;
     float depthBiasClamp = 0.0f;
     float depthBiasSlop = 0.0f;
+    bool isDepthClip = true;
+    bool isMultisample = false;
     float lineWidth = 1.0f;
 };
 
 struct DepthStencilState {
-    /*
-        BYTE3               BYTE2               BYTE1       BIT3            BIT2                BIT1        BIT0
-        stencilFuncBack     stencilFuncFront    depthFunc   stencilTestBack stencilTestFront    depthWrite  depthTest
-     */
-    uint data1 = (0xFF000000 & ((uint8_t)ComparisonFunc::ALWAYS<<24)) |
-                 (0x00FF0000 & ((uint8_t)ComparisonFunc::ALWAYS<<16)) |
-                 (0x0000FF00 & ((uint8_t)ComparisonFunc::LESS)) | 
-                 ((false << 3) | (false << 2) | (true << 1) | (true));
-
-    bool depthTest() const { return (data1 & 0x1);}
-    bool depthWrite() const { return (data1 & 0x2);}
-    bool stencilTestFront() const { return (data1 & 0x4);}
-    bool stencilTestBack() const { return (data1 & 0x8);}
-    ComparisonFunc depthFunc() const { return ComparisonFunc((data1 & 0xFF00) >> 8);}
-    ComparisonFunc stencilFuncFront() const { return ComparisonFunc((data1 & 0xFF0000) >> 16);}
-    ComparisonFunc stencilFuncBack() const { return ComparisonFunc((data1 & 0xFF000000) >> 24);}
-
-    /*
-        BYTE2                   BYTE1                   BYTE0
-        stencilPassOpFront      stencilZFailOpFront     stencilFailOpFront
-     */
-    uint data2 = (0x00FF0000 & ((uint8_t)StencilOp::KEEP<<16)) |
-                 (0x0000FF00 & ((uint8_t)StencilOp::KEEP<<8)) |
-                 (0x000000FF & ((uint8_t)StencilOp::KEEP));
-
-    StencilOp stencilFailOpFront() const { return StencilOp(data2 & 0xFF);}
-    StencilOp stencilZFailOpFront() const { return StencilOp((data2 & 0xFF00) >> 8);}
-    StencilOp stencilPassOpFront() const { return StencilOp((data2 & 0xFF0000) >> 16);}
-    
-    /*
-        BYTE2               BYTE1               BYTE0
-        stencilPassOpBack   stencilZFailOpBack  stencilFailOpBack
-     */
-    uint data3 = (0x00FF0000 & ((uint8_t)StencilOp::KEEP<<16)) |
-                 (0x0000FF00 & ((uint8_t)StencilOp::KEEP<<8)) |
-                 (0x000000FF & ((uint8_t)StencilOp::KEEP));
-
-    StencilOp stencilFailOpBack() const { return StencilOp(data3 & 0xFF);}
-    StencilOp stencilZFailOpBack() const { return StencilOp((data3 & 0xFF00) >> 8);}
-    StencilOp stencilPassOpBack() const { return StencilOp((data3 & 0xFF0000) >> 16);}
-
+    bool depthTest = true;
+    bool depthWrite = true;
+    ComparisonFunc depthFunc = ComparisonFunc::LESS;
+    bool stencilTestFront = false;
+    ComparisonFunc stencilFuncFront = ComparisonFunc::ALWAYS;
     uint stencilReadMaskFront = 0xffffffff;
     uint stencilWriteMaskFront = 0xffffffff;
+    StencilOp stencilFailOpFront = StencilOp::KEEP;
+    StencilOp stencilZFailOpFront = StencilOp::KEEP;
+    StencilOp stencilPassOpFront = StencilOp::KEEP;
     uint stencilRefFront = 1;
+    bool stencilTestBack = false;
+    ComparisonFunc stencilFuncBack = ComparisonFunc::ALWAYS;
     uint stencilReadMaskBack = 0xffffffff;
-    uint stencilWriteMaskBack = 0xffffffff;    
+    uint stencilWriteMaskBack = 0xffffffff;
+    StencilOp stencilFailOpBack = StencilOp::KEEP;
+    StencilOp stencilZFailOpBack = StencilOp::KEEP;
+    StencilOp stencilPassOpBack = StencilOp::KEEP;
     uint stencilRefBack = 1;
 };
 
 struct BlendTarget {
-    /*
-        BYTE3       BYTE2       BYTE1       BYTE0
-        blendEq     blendDst    blendSrc    blendEnabled
-     */
-    uint data1 = (0xFF000000 & ((uint8_t)BlendOp::ADD<<24)) |
-                 (0x00FF0000 & ((uint8_t)BlendFactor::ZERO<<16)) |
-                 (0x0000FF00 & ((uint8_t)BlendFactor::ZERO<<8)) | false;
-    
-    bool blend() const { return data1 & 0xFF;}
-    BlendFactor blendSrc() const { return BlendFactor((data1 & 0xFF00) >> 8);}
-    BlendFactor blendDst() const { return BlendFactor((data1 & 0xFF0000) >> 16);}
-    BlendOp blendEq() const { return BlendOp((data1 & 0xFF000000) >> 24);}
-    
-    /*
-       BYTE3            BYTE2           BYTE1           BYTE0
-       blendColorMask   blendAlphaEq    blendDstAlpha   blendSrcAlpha
-    */
-    uint data2 = (0xFF000000 & ((uint8_t)ColorMask::ALL<<24)) |
-                 (0x00FF0000 & ((uint8_t)BlendOp::ADD<<16)) |
-                 (0x0000FF00 & ((uint8_t)BlendFactor::ZERO<<8)) |
-                 (0x000000FF & ((uint8_t)BlendFactor::ONE));
-    
-    BlendFactor blendSrcAlpha() const {return BlendFactor((data2 & 0xFF));}
-    BlendFactor blendDstAlpha() const {return BlendFactor((data2 & 0xFF00) >> 8);}
-    BlendOp blendAlphaEq() const { return BlendOp((data2 & 0xFF0000) >> 16);}
-    ColorMask blendColorMask() const { return ColorMask((data2 & 0xFF000000) >> 24);}
+    bool blend = false;
+    BlendFactor blendSrc = BlendFactor::ONE;
+    BlendFactor blendDst = BlendFactor::ZERO;
+    BlendOp blendEq = BlendOp::ADD;
+    BlendFactor blendSrcAlpha = BlendFactor::ONE;
+    BlendFactor blendDstAlpha = BlendFactor::ZERO;
+    BlendOp blendAlphaEq = BlendOp::ADD;
+    ColorMask blendColorMask = ColorMask::ALL;
 };
+
 typedef vector<BlendTarget> BlendTargetList;
 
 struct BlendState {
-    /*
-        BYTE1       BYTE0
-        isIndepend  isA2C
-    */
-    uint A2C_Independ = 0;
+    bool isA2C = false;
+    bool isIndepend = false;
     Color blendColor;
-    uint targetIndex;
-    uint targetCount;
+//    BlendTargetList targets;
+    uint targetIndex = 0;
+    uint targetCount = 0;
     
-    bool isA2C() const { return bool(A2C_Independ & 0xFF); }
-    bool isIndepend() const { return bool((A2C_Independ & 0xFF00) >> 8); }
+//    BlendState() {
+//        targets.emplace_back(BlendTarget());
+//    }
 };
 
 struct PipelineStateInfo {

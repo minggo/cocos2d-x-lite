@@ -9,15 +9,16 @@ struct Pass;
 struct SubModel;
 struct PSOInfo;
 
-
 struct CC_DLL BatchedItem {
     gfx::BufferList vbs;
-    uint8_t *vbDatas = nullptr;
+    vector<std::shared_ptr<uint8_t>> vbDatas;
     gfx::Buffer *vbIdx = nullptr;
-    float *vbIdxData = nullptr;
+    vector<float> vbIdxData;
+    uint vbCount = 0;
     uint mergCount = 0;
     gfx::InputAssembler *ia = nullptr;
     gfx::Buffer *ubo = nullptr;
+    UBOLocalBatched uboData;
     PSOInfo *psoInfo = nullptr;
 };
 typedef vector<BatchedItem> BatchedItemList;
@@ -26,9 +27,11 @@ class CC_DLL BatchedBuffer : public Object {
 public:
     BatchedBuffer(Pass *pass);
     ~BatchedBuffer() = default;
+    
+    static BatchedBuffer *get(Pass *pass);
 
     void destroy();
-    void merge(SubModel *, uint passIdx, RenderObject *);
+    void merge(const SubModel *, uint passIdx, const RenderObject&);
     void clear();
     void clearUBO();
 
@@ -39,6 +42,7 @@ private:
     //    const _localBatched = new UBOLocalBatched();
     BatchedItemList _batchedItems;
     Pass *_pass = nullptr;
+    static map<Pass*, BatchedBuffer*> _buffers;
 };
 
 } // namespace pipeline

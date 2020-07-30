@@ -1,10 +1,16 @@
 #include "ForwardStage.h"
-#include "../RenderBatchedQueue.h"
-#include "../RenderInstancedQueue.h"
-#include "../RenderAdditiveLightQueue.h"
-#include "../RenderQueue.h"
-#include "../helper/SubModel.h"
-
+#include "pipeline/RenderBatchedQueue.h"
+#include "pipeline/RenderInstancedQueue.h"
+#include "pipeline/RenderAdditiveLightQueue.h"
+#include "pipeline/RenderQueue.h"
+#include "pipeline/helper/SubModel.h"
+#include "pipeline/RenderPipeline.h"
+#include "pipeline/helper/Pool.h"
+#include "pipeline/helper/Model.h"
+#include "pipeline/helper/SubModel.h"
+#include "pipeline/helper/Pass.h"
+#include "pipeline/InstancedBuffer.h"
+#include "pipeline/BatchedBuffer.h"
 
 namespace cc {
 namespace pipeline {
@@ -46,42 +52,44 @@ void ForwardStage::rebuild() {
 void ForwardStage::render(RenderView *view) {
     _instancedQueue->clear();
     _batchedQueue->clear();
-//    const auto *validLights = _pipeline->getValidLights();
-//    const lightBuffers = this.pipeline.lightBuffers;
-//    const lightIndices = this.pipeline.lightIndices;
-//    this._additiveLightQueue.clear(validLights, lightBuffers, lightIndices);
-//    this._renderQueues.forEach(this.renderQueueClearFunc);
-//
-//    const renderObjects = this._pipeline.renderObjects;
-//    const lightIndexOffset = this.pipeline.lightIndexOffsets;
-//    let m = 0; let p = 0; let k = 0;
-//    for (let i = 0; i < renderObjects.length; ++i) {
-//        const nextLightIndex = i + 1 < renderObjects.length ? lightIndexOffset[i + 1] : lightIndices.length;
-//        const ro = renderObjects[i];
-//        if (ro.model.isDynamicBatching) {
-//            const subModels = ro.model.subModels;
-//            for (m = 0; m < subModels.length; ++m) {
-//                const subModel = subModels[m];
-//                const passes = subModel.passes;
-//                for (p = 0; p < passes.length; ++p) {
-//                    const pass = passes[p];
-//                    if (pass.batchingScheme === BatchingSchemes.INSTANCING) {
-//                        const instancedBuffer = InstancedBuffer.get(pass);
-//                        instancedBuffer.merge(subModel, ro.model.instancedAttributes, subModel.psoInfos[p]);
-//                        this._instancedQueue.queue.add(instancedBuffer);
-//                    } else if (pass.batchingScheme === BatchingSchemes.VB_MERGING) {
-//                        const batchedBuffer = BatchedBuffer.get(pass);
-//                        batchedBuffer.merge(subModel, p, ro);
-//                        this._batchedQueue.queue.add(batchedBuffer);
-//                    } else {
-//                        for (k = 0; k < this._renderQueues.length; k++) {
-//                            this._renderQueues[k].insertRenderPass(ro, m, p);
-//                        }
-//                        this._additiveLightQueue.add(ro, m, pass, lightIndexOffset[i], nextLightIndex);
-//                    }
-//                }
-//            }
-//        } else {
+    const auto &validLights = _pipeline->getValidLights();
+    const auto &lightBuffers = _pipeline->getLightBuffers();
+    const auto &lightIndices = _pipeline->getLightIndices();
+    _additiveLightQueue->clear(validLights, lightBuffers, lightIndices);
+    
+    for(auto renderQueue : _renderQueues) {
+        renderQueue->clear();
+    }
+
+    const auto &renderObjects = _pipeline->getRenderObjects();
+    const auto &lightIndexOffset = _pipeline->getLightIndexOffsets();
+    size_t m = 0, p = 0, k = 0;
+    for (size_t i = 0; i < renderObjects.size(); ++i) {
+        auto nextLightIndex = i + 1 < renderObjects.size() ? lightIndexOffset[i + 1] : lightIndices.size();
+        const auto &ro = renderObjects[i];
+        auto *model = GET_MODEL(ro.modelIndex);
+        if (model->isDynamicBatching) {
+            for (m = 0; m < model->subModelsCount; ++m) {
+                auto* subModel = GET_SUBMODEL(model->subModelsIndex, m);
+                for (p = 0; p < subModel->passesCount; ++p) {
+                    auto *pass = GET_PASS(subModel->passesIndex, p);
+                    if (pass->batchingScheme == (uint)BatchingSchemes::INSTANCING) {
+                        auto *instancedBuffer = InstancedBuffer::get(pass);
+                        instancedBuffer->merge(subModel, model->instancedAttributes, GET_PSOINFO(subModel->psoInfosIndex));
+                        _instancedQueue->getQueue().insert(instancedBuffer);
+                    } else if (pass->batchingScheme == (uint)BatchingSchemes::VB_MERGING) {
+                        auto *batchedBuffer = BatchedBuffer::get(pass);
+                        batchedBuffer->merge(subModel, p, ro);
+                        _batchedQueue->getQueue().insert(batchedBuffer);
+                    } else {
+                        for (k = 0; k < _renderQueues.size(); k++) {
+                            _renderQueues[k]->insertRenderPass(ro, m, p);
+                        }
+                        _additiveLightQueue->add(ro, m, pass, lightIndexOffset[i], nextLightIndex);
+                    }
+                }
+            }
+        } else {
 //            for (m = 0; m < ro.model.subModelNum; m++) {
 //                for (p = 0; p < ro.model.getSubModel(m).passes.length; p++) {
 //                    const pass = ro.model.getSubModel(m).passes[p];
@@ -91,8 +99,8 @@ void ForwardStage::render(RenderView *view) {
 //                    this._additiveLightQueue.add(ro, m, pass, lightIndexOffset[i], nextLightIndex);
 //                }
 //            }
-//        }
-//    }
+        }
+    }
 //    this._renderQueues.forEach(this.renderQueueSortFunc);
 //
 //    const camera = view.camera;

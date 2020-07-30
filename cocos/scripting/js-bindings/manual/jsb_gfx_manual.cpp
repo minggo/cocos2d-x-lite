@@ -550,42 +550,42 @@ bool js_register_gfx_SubPass(se::Object *obj) {
     return true;
 }
 
-static bool js_gfx_BlendState_get_targets(se::State &s) {
-    cc::gfx::BlendState *cobj = (cc::gfx::BlendState *)s.nativeThisObject();
-    SE_PRECONDITION2(cobj, false, "js_gfx_GFXBlendState_get_targets : Invalid Native Object");
+//static bool js_gfx_BlendState_get_targets(se::State &s) {
+//    cc::gfx::BlendState *cobj = (cc::gfx::BlendState *)s.nativeThisObject();
+//    SE_PRECONDITION2(cobj, false, "js_gfx_GFXBlendState_get_targets : Invalid Native Object");
+//
+//    CC_UNUSED bool ok = true;
+//    se::Value *jsTargets = &s.rval();
+//
+//    const cc::gfx::BlendTargetList &targets = cc::pipeline::BlendTargetPool::getBlendTarget(cobj->targetIndex, cobj->targetCount);;
+//    se::HandleObject arr(se::Object::createArrayObject(targets.size()));
+//    jsTargets->setObject(arr);
+//
+//    uint32_t i = 0;
+//    for (const auto &target : targets) {
+//        se::Value out = se::Value::Null;
+//        native_ptr_to_seval(target, &out);
+//        arr->setArrayElement(i, out);
+//
+//        ++i;
+//    }
+//    return true;
+//}
+//SE_BIND_PROP_GET(js_gfx_BlendState_get_targets)
 
-    CC_UNUSED bool ok = true;
-    se::Value *jsTargets = &s.rval();
-
-    cc::gfx::BlendTargetList &targets = cobj->targets;
-    se::HandleObject arr(se::Object::createArrayObject(targets.size()));
-    jsTargets->setObject(arr);
-
-    uint32_t i = 0;
-    for (const auto &target : targets) {
-        se::Value out = se::Value::Null;
-        native_ptr_to_seval(target, &out);
-        arr->setArrayElement(i, out);
-
-        ++i;
-    }
-    return true;
-}
-SE_BIND_PROP_GET(js_gfx_BlendState_get_targets)
-
-static bool js_gfx_BlendState_set_targets(se::State &s) {
-    const auto &args = s.args();
-    cc::gfx::BlendState *cobj = (cc::gfx::BlendState *)s.nativeThisObject();
-    SE_PRECONDITION2(cobj, false, "js_gfx_GFXBlendState_set_targets : Invalid Native Object");
-
-    CC_UNUSED bool ok = true;
-    cc::gfx::BlendTargetList arg0;
-    ok &= seval_to_std_vector(args[0], &arg0);
-    SE_PRECONDITION2(ok, false, "js_gfx_GFXBlendState_set_targets : Error processing new value");
-    cobj->targets = arg0;
-    return true;
-}
-SE_BIND_PROP_SET(js_gfx_BlendState_set_targets)
+//static bool js_gfx_BlendState_set_targets(se::State &s) {
+//    const auto &args = s.args();
+//    cc::gfx::BlendState *cobj = (cc::gfx::BlendState *)s.nativeThisObject();
+//    SE_PRECONDITION2(cobj, false, "js_gfx_GFXBlendState_set_targets : Invalid Native Object");
+//
+//    CC_UNUSED bool ok = true;
+//    cc::gfx::BlendTargetList arg0;
+//    ok &= seval_to_std_vector(args[0], &arg0);
+//    SE_PRECONDITION2(ok, false, "js_gfx_GFXBlendState_set_targets : Error processing new value");
+//    cobj->targets = arg0;
+//    return true;
+//}
+//SE_BIND_PROP_SET(js_gfx_BlendState_set_targets)
 
 static bool js_gfx_CommandBuffer_execute(se::State &s) {
     cc::gfx::CommandBuffer *cobj = (cc::gfx::CommandBuffer *)s.nativeThisObject();
@@ -723,7 +723,7 @@ bool register_all_gfx_manual(se::Object *obj) {
 
     __jsb_cc_gfx_Buffer_proto->defineFunction("update", _SE(js_gfx_GFXBuffer_update));
 
-    __jsb_cc_gfx_BlendState_proto->defineProperty("targets", _SE(js_gfx_BlendState_get_targets), _SE(js_gfx_BlendState_set_targets));
+//    __jsb_cc_gfx_BlendState_proto->defineProperty("targets", _SE(js_gfx_BlendState_get_targets), nullptr);
 
     __jsb_cc_gfx_CommandBuffer_proto->defineFunction("execute", _SE(js_gfx_CommandBuffer_execute));
     __jsb_cc_gfx_CommandBuffer_proto->defineFunction("copyBuffersToTexture", _SE(js_gfx_CommandBuffer_copyBuffersToTexture));

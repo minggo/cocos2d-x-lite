@@ -532,6 +532,10 @@ cocos_source_files(
     cocos/renderer/pipeline/helper/Camera.cpp
     cocos/renderer/pipeline/helper/Material.h
     cocos/renderer/pipeline/helper/Material.cpp
+    cocos/renderer/pipeline/helper/Mesh.h
+    cocos/renderer/pipeline/helper/Mesh.cpp
+    cocos/renderer/pipeline/helper/Morph.h
+    cocos/renderer/pipeline/helper/Morph.cpp
     cocos/renderer/pipeline/helper/Pool.h
     cocos/renderer/pipeline/helper/Pool.cpp
     cocos/renderer/pipeline/forward/ForwardFlow.cpp
