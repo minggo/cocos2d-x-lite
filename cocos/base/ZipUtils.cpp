@@ -34,6 +34,9 @@
     #include "unzip/unzip.h"
 #endif
 
+#include "unzip/ioapi_mem.h"
+#include <memory>
+
 #include <zlib.h>
 #include <assert.h>
 #include <stdlib.h>
@@ -42,10 +45,10 @@
 #include "platform/FileUtils.h"
 #include <map>
 
-// IDEA: Other platforms should use upstream minizip like mingw-w64
-#ifdef MINIZIP_FROM_SYSTEM
-    #define unzGoToFirstFile64(A, B, C, D) unzGoToFirstFile2(A, B, C, D, NULL, 0, NULL, 0)
-    #define unzGoToNextFile64(A, B, C, D)  unzGoToNextFile2(A, B, C, D, NULL, 0, NULL, 0)
+// minizip 1.2.0 is same with other platforms
+#ifndef unzGoToFirstFile64
+    #define unzGoToFirstFile64(A,B,C,D) unzGoToFirstFile2(A,B,C,D, NULL, 0, NULL, 0)
+    #define unzGoToNextFile64(A,B,C,D) unzGoToNextFile2(A,B,C,D, NULL, 0, NULL, 0)
 #endif
 
 namespace cc {
@@ -449,6 +452,7 @@ struct ZipEntryInfo {
 class ZipFilePrivate {
 public:
     unzFile zipFile;
+    std::unique_ptr<ourmemory_s> memfs;
 
     // std::unordered_map is faster if available on the platform
     typedef std::unordered_map<std::string, struct ZipEntryInfo> FileListContainer;
@@ -460,7 +464,7 @@ ZipFile *ZipFile::createWithBuffer(const void *buffer, uLong size) {
     if (zip && zip->initWithBuffer(buffer, size)) {
         return zip;
     } else {
-        if (zip) delete zip;
+        delete zip;
         return nullptr;
     }
 }
@@ -625,8 +629,15 @@ int ZipFile::getCurrentFileInfo(std::string *filename, unz_file_info *info) {
 bool ZipFile::initWithBuffer(const void *buffer, uLong size) {
     if (!buffer || size == 0) return false;
 
-    _data->zipFile = unzOpenBuffer(buffer, size);
+    zlib_filefunc_def memory_file = { 0 };
+
+    std::unique_ptr<ourmemory_t> memfs(new(std::nothrow) ourmemory_t{ (char*)const_cast<void*>(buffer), static_cast<uint32_t>(size), 0, 0, 0 });
+    if (!memfs) return false;
+    fill_memory_filefunc(&memory_file, memfs.get());
+
+    _data->zipFile = unzOpen2(nullptr, &memory_file);
     if (!_data->zipFile) return false;
+    _data->memfs = std::move(memfs);
 
     setFilter(emptyFilename);
     return true;
