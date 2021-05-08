@@ -43,18 +43,32 @@ public:
 
     void updateWorldTransform();
 
+    inline void setFlagsChanged(bool value) { _flagsChanged = value; }
+    inline void setLayer(uint32_t layer) { _layer = layer; }
+    inline void setWorldMatrix(Mat4 matrix) { _worldMatrix = std::move(matrix); }
+    inline void setWorldPosition(Vec3 pos) { _worldPosition = std::move(pos); }
+    inline void setWorldRotation(Quaternion rotation) { _worldRotation = rotation; }
+    inline void setWorldScale(Vec3 scale) { _worldScale = std::move(scale); }
+
+    inline bool              getFlagsChanged() const { return _flagsChanged; }
+    inline uint32_t          getLayer() const { return _layer; }
+    inline const Mat4 &      getWorldMatrix() const { return _worldMatrix; }
+    inline const Vec3 &      getWorldPosition() const { return _worldPosition; }
+    inline const Quaternion &getWorldRotation() const { return _worldRotation; }
+    inline const Vec3 &      getWorldScale() const { return _worldScale; }
+
 private:
-    uint32_t   _layer{0};
-    bool       _flagsChanges{false};
+    bool       _flagsChanged{false};
     bool       _dirtyFlags{false};
     bool       _hasChangeFlags{false};
     Node *     _parent{nullptr};
+    uint32_t   _layer{0};
     Vec3       _lPos;
     Quaternion _lScale;
-    Vec3       _pos;
-    Quaternion _rot;
-    Vec3       _scale;
-    Mat4       _mat;
+    Vec3       _worldPosition;
+    Quaternion _worldRotation;
+    Vec3       _worldScale;
+    Mat4       _worldMatrix;
 };
 
 } // namespace scene

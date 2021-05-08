@@ -46,12 +46,17 @@ public:
     virtual ~Light()     = default;
     Light &operator=(const Light &) = delete;
     Light &operator=(const Light &&) = delete;
+    
+    virtual void update() {}
 
-    void setColorTemperatureRGB(Vec3);
-    void setNode(Node *);
-    void setUseColorTemperature(bool);
+    inline void setColor(Vec3 color) { _color = std::move(color); }
+    inline void setColorTemperatureRGB(Vec3 value) { _colorTemperatureRGB = std::move(value); }
+    inline void setNode(Node *node) { _node = node; }
+    inline void setUseColorTemperature(bool value) { _useColorTemperature = value; }
+    inline void setType(LightType type) { _type = type; }
 
     inline const Vec3 &getColor() const { return _color; }
+    inline const Vec3 &getColorTemperatureRGB() const { return _colorTemperatureRGB; }
     inline Node *      getNode() const { return _node; }
     inline LightType   getType() const { return _type; }
     inline bool        getUseColorTemperature() const { return _useColorTemperature; }
@@ -61,6 +66,7 @@ protected:
     Node *    _node{nullptr};
     LightType _type{LightType::UNKNOWN};
     Vec3      _color;
+    Vec3      _colorTemperatureRGB;
 };
 
 } // namespace scene

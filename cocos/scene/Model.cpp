@@ -28,5 +28,11 @@
 namespace cc {
 namespace scene {
 
+void Model::updateTransform() {
+}
+
+void Model::updateUBOs(uint32_t) {
+}
+
 } // namespace scene
 } // namespace cc
