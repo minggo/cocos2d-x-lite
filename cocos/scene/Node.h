@@ -45,10 +45,10 @@ public:
 
     inline void setFlagsChanged(bool value) { _flagsChanged = value; }
     inline void setLayer(uint32_t layer) { _layer = layer; }
-    inline void setWorldMatrix(Mat4 matrix) { _worldMatrix = std::move(matrix); }
-    inline void setWorldPosition(Vec3 pos) { _worldPosition = std::move(pos); }
-    inline void setWorldRotation(Quaternion rotation) { _worldRotation = rotation; }
-    inline void setWorldScale(Vec3 scale) { _worldScale = std::move(scale); }
+    inline void setWorldMatrix(const Mat4& matrix) { _worldMatrix = matrix; }
+    inline void setWorldPosition(const Vec3& pos) { _worldPosition = pos; }
+    inline void setWorldRotation(const Quaternion& rotation) { _worldRotation = rotation; }
+    inline void setWorldScale(const Vec3& scale) { _worldScale = scale; }
 
     inline bool              getFlagsChanged() const { return _flagsChanged; }
     inline uint32_t          getLayer() const { return _layer; }

@@ -46,12 +46,12 @@ public:
     inline void setAABB(AABB aabb) { _aabb = std::move(aabb); }
     inline void setAngle(float angle) { _angle = angle; }
     inline void setAspect(float aspect) { _aspect = aspect; }
-    inline void setDir(Vec3 dir) { _dir = std::move(dir); }
+    inline void setDir(const Vec3& dir) { _dir = dir; }
     inline void setFrustum(Frustum frustum) { _frustum = std::move(frustum); }
     inline void setIlluminace(float illu) { _illuminance = illu; }
     inline void setNeedUpdate(bool value) { _needUpdate = value; }
     inline void setRange(float range) { _range = range; }
-    inline void setPos(Vec3 pos) { _pos = std::move(pos); }
+    inline void setPos(const Vec3& pos) { _pos = pos; }
     inline void setSize(float size) { _size = size; }
 
     inline const AABB &   getAABB() const { return _aabb; }
