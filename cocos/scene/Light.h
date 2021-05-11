@@ -49,8 +49,8 @@ public:
     
     virtual void update() {}
 
-    inline void setColor(Vec3 color) { _color = std::move(color); }
-    inline void setColorTemperatureRGB(Vec3 value) { _colorTemperatureRGB = std::move(value); }
+    inline void setColor(const Vec3 &color) { _color = color; }
+    inline void setColorTemperatureRGB(const Vec3& value) { _colorTemperatureRGB = value; }
     inline void setNode(Node *node) { _node = node; }
     inline void setUseColorTemperature(bool value) { _useColorTemperature = value; }
     inline void setType(LightType type) { _type = type; }

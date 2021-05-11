@@ -42,7 +42,7 @@ public:
 
     void update() override;
 
-    inline void setDir(Vec3 dir) { _dir = std::move(dir); }
+    inline void setDir(const Vec3& dir) { _dir = dir; }
     inline void setIlluminance(float illum) { _illuminance = illum; }
 
     inline const Vec3 &getDir() const { return _dir; }

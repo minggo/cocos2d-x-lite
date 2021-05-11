@@ -31,7 +31,7 @@ namespace scene {
 void Model::updateTransform() {
 }
 
-void Model::updateUBOs(uint32_t) {
+void Model::updateUBOs(uint32_t /*stamp*/) {
 }
 
 } // namespace scene
