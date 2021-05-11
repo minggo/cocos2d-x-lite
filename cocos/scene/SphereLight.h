@@ -45,7 +45,7 @@ public:
 
     inline void setAABB(AABB aabb) { _aabb = std::move(aabb); }
     inline void setIllumiance(float illum) { _illuminance = illum; }
-    inline void setPos(Vec3 pos) { _pos = std::move(pos); }
+    inline void setPos(const Vec3& pos) { _pos = pos; }
     inline void setRange(float range) { _range = range; }
     inline void setSize(float size) { _size = size; }
 
