@@ -95,7 +95,7 @@ void RenderAdditiveLightQueue::recordCommandBuffer(gfx::Device *device, gfx::Ren
 
         for (size_t i = 0; i < dynamicOffsets.size(); ++i) {
             const auto light                = lights[i];
-            auto *      globalDescriptorSet = _pipeline->getGlobalDSManager()->getOrCreateDescriptorSet(light);
+            auto *      globalDescriptorSet = _pipeline->getGlobalDSManager()->getOrCreateDescriptorSet(i);
             _dynamicOffsets[0]              = dynamicOffsets[i];
             cmdBuffer->bindDescriptorSet(globalSet, globalDescriptorSet);
             cmdBuffer->bindDescriptorSet(localSet, descriptorSet, _dynamicOffsets);
